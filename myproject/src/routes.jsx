@@ -15,6 +15,7 @@ import Dashboard from "./Layout/DashboardLayout/dashboard";
 import Orders from "./Layout/DashboardLayout/Pages/Orders";
 import Products from "./Layout/DashboardLayout/Pages/Products";
 import Customers from "./Layout/DashboardLayout/Pages/Customers";
+import DashboardPage from "./Layout/DashboardLayout/Pages/DashboardPage";
 
 
 const router = createBrowserRouter([
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       path: "/dashboard",
       element: < Dashboard/>,
       children: [
+        {
+          path: "",
+          element: <DashboardPage />,
+        },
         {
           path: "orders",
           element: <Orders />,

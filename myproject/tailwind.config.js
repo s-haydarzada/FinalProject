@@ -17,7 +17,19 @@ export default {
       colors:{
         primary:"#222222",
         secondary:"#F5E6E0"
-      }
+      },
+      backgroundColor: {
+        'orange-400': '#ffb84d',
+        'blue-300': '#b3ecff',
+        'teal-300': '#AAF0D1',
+        'green-300': '#ccffd9',
+      },
+      iconColor: {
+        'orange-400': '#ff5c33',
+        'blue-400': '#4d79ff',
+        'teal-500': '#339933',
+        'green-500': '#4dff4d',
+      },
     },
     container:{
       padding:{
