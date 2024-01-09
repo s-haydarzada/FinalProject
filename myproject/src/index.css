@@ -129,7 +129,7 @@
 .text{
   background: linear-gradient(to right,rgba(0,168,253),#ea4ae7 35%,#7063e3);
   background-size: 200% auto;
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient 3s linear infinite;
 }

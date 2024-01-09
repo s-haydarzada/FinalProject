@@ -6,17 +6,17 @@ export default {
     'node_modules/flowbite-react/lib/esm/**/*.js',
   ],
   theme: {
-    fontFamily:{
-      primary:"Poppins"
+    fontFamily: {
+      primary: "Poppins"
     },
     extend: {
       animation: {
         'fadeIn': 'fadeIn 0.4s ease-in-out',
-        
+
       },
-      colors:{
-        primary:"#222222",
-        secondary:"#F5E6E0"
+      colors: {
+        primary: "#222222",
+        secondary: "#F5E6E0",
       },
       backgroundColor: {
         'orange-400': '#ffb84d',
@@ -31,17 +31,17 @@ export default {
         'green-500': '#4dff4d',
       },
     },
-    container:{
-      padding:{
-        DEFAULT:"30px",
-        lg:"0"
+    container: {
+      padding: {
+        DEFAULT: "30px",
+        lg: "0"
       },
     },
-    screens:{
-      sm:"640px",
-      md:"768px",
-      lg:"1024px",
-      xl:"1440px"
+    screens: {
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1440px"
     },
 
   },

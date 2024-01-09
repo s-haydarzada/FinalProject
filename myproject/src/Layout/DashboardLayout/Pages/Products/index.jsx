@@ -5,7 +5,7 @@ import MyTable from "../DashboardPage/components/MyTable";
 
 const Products = () => {
   return (
-    <div className="p-4">
+    <div className="p-4 h-screen overflow-y-auto scrollbar-hide">
       <div className="flex items-center justify-between">
         <Typography.Title level={3}>Products</Typography.Title>
         <div className="flex justify-end items-center gap-3">
@@ -69,9 +69,7 @@ const Products = () => {
           </div>
         </div>
       </form>
-      <div className="mb-10">
       <MyTable/>
-      </div>
     </div>
   );
 };
