@@ -1,17 +1,30 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LoginInput from "./components/LoginInput";
 import BreadcrumbItem from "./../../components/BreadcrumbItem/index";
 import Header from "./components/Header";
 import LoginBtn from "./components/LoginBtn";
 import { useFormik } from "formik";
+import { AuthContext } from "../../../../Contexts/AuthContext";
+import { LoginCall } from "../../../../services/auth";
 
-const defaultFormFields = {
-  email: "",
-  password: "",
-};
 const Login = () => {
-  
+  const { user, setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    if (user) {
+      if (user.role === "superadmin") {
+        navigate("/dashboard");
+      } else if (user.role === "client") {
+        navigate("/");
+      } else {
+        navigate("/login");
+      }
+    }
+  }, [user]);
+
   const dynamicItems = [
     {
       title: (
@@ -26,34 +39,23 @@ const Login = () => {
     },
   ];
 
-  const [formFields, setFormFields] = useState(defaultFormFields);
-
-  const { username, password } = formFields;
-
-  // const resetFormFields = () => {
-  //   setFormFields(defaultFormFields)
-  // }
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormFields({ ...formFields, [name]: value });
-  };
-
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password:""
+      email: "",
+      password: "",
     },
-    onSubmit: values => {
-      console.log(values);
-      LoginCall(values).then((res=>{
-        console.log(res)
-      })).catch((err)=>{
-        console.log(err)
-      })
-      // alert(JSON.stringify(values, null, 2));
+    onSubmit: (values) => {
+      LoginCall(values)
+        .then(({ data }) => {
+          localStorage.setItem("token", data.token);
+          setUser(data.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   });
+  
 
   return (
     <section className="w-full min-h-screen pt-28">
@@ -64,8 +66,12 @@ const Login = () => {
             title="Login"
             subtitle="Please login using account details below."
           />
-          <form action="" className="mt-5 w-full">
-          <LoginInput
+          <form
+            action=""
+            className="mt-5 w-full"
+            onSubmit={formik.handleSubmit}
+          >
+            <LoginInput
               id="email"
               name="email"
               label="Email"
@@ -84,7 +90,11 @@ const Login = () => {
               value={formik.values.password}
               onChange={formik.handleChange}
             />
-            <LoginBtn title="Login" returnBtn="Create Account" returnPath={"/register"}/>
+            <LoginBtn
+              title="Login"
+              returnBtn="Create Account"
+              returnPath={"/register"}
+            />
           </form>
         </div>
       </div>

@@ -9,8 +9,10 @@ import MenuItem from "../MenuItem/index";
 import { AiOutlineClose } from "react-icons/ai";
 import { SidebarContext } from "../../../../Contexts/SidebarContext";
 import { CartContext } from "../../../../Contexts/CardContext";
+import { Avatar } from "antd";
 
 const Navbar = () => {
+
   const [toggle, setToggle] = useState(false);
   const [isActivate, setIsActivate] = useState(true);
   const { isOpen, setIsOpen } = useContext(SidebarContext);
@@ -65,7 +67,8 @@ const Navbar = () => {
       window.scrollY > 60 ? setIsActivate(true) : setIsActivate(false);
     });
   }, []);
-  
+
+
 
   return (
     <header
@@ -85,7 +88,7 @@ const Navbar = () => {
           <Menu menu={menu} />
         </div>
         <div className="flex gap-4 text-lg mr-4">
-          <div className="flex items-center gap-1 cursor-pointer relative">
+          <div className="flex items-center gap-1 cursor-pointer relative z-30">
             <IoSearch />
             <span className="hidden md:block">Search</span>
           </div>

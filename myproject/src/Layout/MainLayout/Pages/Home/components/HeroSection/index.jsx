@@ -21,7 +21,7 @@ const Hero = () => {
   };
 
   const navigateShopPage = () => {
-    navigate("/login");
+    navigate("/shop");
   };
 
   return (

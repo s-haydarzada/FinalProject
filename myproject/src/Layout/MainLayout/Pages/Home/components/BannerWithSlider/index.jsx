@@ -26,7 +26,6 @@ const BannerWithSlider = () => {
           slidesToShow: 2,
           slidesToScroll: 1,
           infinite: true,
-          dots: true,
         },
       },
       {
@@ -63,7 +62,7 @@ const BannerWithSlider = () => {
           {products.map((prod) => {
             return (
               <CardItem
-                key={prod.id}
+                key={prod._id}
                 product={prod}
                 customStyle={customStyles}
               />

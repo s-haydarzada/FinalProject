@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
+import { AddNewBasket } from "../services/products";
 
 export const CartContext = createContext();
 
@@ -12,7 +13,7 @@ const CardProvider = ({ children }) => {
       return acc + curr.price * curr.amount;
     },0);
     setTotal(total)
-  });
+  },[]);
 
   useEffect(() => {
     if (cart) {
@@ -36,6 +37,7 @@ const CardProvider = ({ children }) => {
       setCart([...cart, { ...product, amount: 1 }]);
     }
   };
+
 
   const removeFromCart = (id) => {
     const newCart = cart.filter((item) => {

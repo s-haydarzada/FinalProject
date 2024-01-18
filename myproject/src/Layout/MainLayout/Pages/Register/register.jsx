@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import BreadcrumbItem from "../../components/BreadcrumbItem";
 import LoginInput from "../Login/components/LoginInput";
 import LoginBtn from "../Login/components/LoginBtn";
 import Header from "../Login/components/Header";
 import { useFormik } from 'formik';
-import { RegisterCall } from "../../../../services/auth/RegisterCall";
+import { RegisterCall } from "../../../../services/auth";
+import { AuthContext } from "../../../../Contexts/AuthContext";
 
 const Register = () => {
+
+  const {setUser}=useContext(AuthContext)
 
   const formik = useFormik({
     initialValues: {
@@ -18,10 +21,11 @@ const Register = () => {
     },
 
     onSubmit: values => {
-      console.log(values)
-      RegisterCall(values).then((res=>{
-        console.log(res)
-      })).catch((err)=>{
+      RegisterCall(values).then(({data})=>{
+        console.log(data);
+        localStorage.setItem("token",data.token)
+        setUser(data.user)
+      }).catch((err)=>{
         console.log(err)
       })
     },

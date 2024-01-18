@@ -56,7 +56,7 @@ const BestSellerProducts = () => {
       <div>
       <Slider {...settings}>
         {products.map((prod) => {
-          return <CardItem key={prod.id} product={prod} />;
+          return <CardItem key={prod._id} product={prod} />;
         })}
         </Slider>
       </div>

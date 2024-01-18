@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import CardItem from "../CardItem";
 import { ProductContext } from "./../../../../../../Contexts/ProductContext";
-import Slider from "react-slick";
+import Slider from "react-slick"
 
 const CardSection = () => {
   const { products } = useContext(ProductContext);
-  
+
   var settings = {
     className: "center",
     centerMode: true,
@@ -24,7 +24,6 @@ const CardSection = () => {
           slidesToShow: 3,
           slidesToScroll: 3,
           infinite: true,
-          dots: true
         }
       },
       {
@@ -52,7 +51,7 @@ const CardSection = () => {
           <div>
           <Slider {...settings}>
             {products.map((prod) => (
-              <CardItem key={prod.id} product={prod} />
+              <CardItem key={prod._id} product={prod} />
             ))}
             </Slider>
           </div>

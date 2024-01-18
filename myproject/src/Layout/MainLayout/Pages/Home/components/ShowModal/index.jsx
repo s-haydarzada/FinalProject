@@ -6,17 +6,18 @@ import { CartContext } from "../../../../../../Contexts/CardContext";
 import { motion } from "framer-motion";
 import { fadeIn } from "../../../../../../_variants";
 
-const ShowModal = ({ isModalOpen, setIsModalOpen, productId }) => {
+const ShowModal = ({ isModalOpen, setIsModalOpen,product}) => {
   const { products } = useContext(ProductContext);
-  const { addToCart,removeFromCart } = useContext(CartContext);
+  const { addToCart } = useContext(CartContext);
+  
 
-  const product = products.find((item) => item.id === parseInt(productId));
-
+  const { images, title, description, productPrice,_id,salePrice } = product;
   if (!product) {
     return null;
   }
+  
+  const image = images && images.length > 0 ? images[0] : null;
 
-  const { image, title, description, price } = product;
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -24,7 +25,7 @@ const ShowModal = ({ isModalOpen, setIsModalOpen, productId }) => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    removeFromCart(productId);
+    removeFromCart(_id);
   };
 
   return (
@@ -47,7 +48,7 @@ const ShowModal = ({ isModalOpen, setIsModalOpen, productId }) => {
               <div className="flex items-center justify-center mb-8 lg:mb-0 border p-2">
                 <img
                   className="max-w-[200px] w-full h-[300px] lg:max-w-sm"
-                  src={image}
+                  src={image.url}
                   alt=""
                 />
               </div>
@@ -55,6 +56,7 @@ const ShowModal = ({ isModalOpen, setIsModalOpen, productId }) => {
 
             <div className="flex-1 ml-10 text-center lg:text-left">
               <motion.div
+              className="border py-14 px-5"
                 variants={fadeIn("left", 0.2)}
                 initial="hidden"
                 whileInView={"show"}
@@ -63,12 +65,17 @@ const ShowModal = ({ isModalOpen, setIsModalOpen, productId }) => {
                 <h1 className="text-[26px] font-medium max-w-[450px] mx-auto lg:mx-0">
                   {title}
                 </h1>
-                <div className="text-xl font-medium mb-6 text-red-500">
-                  $ {price}
+                <div className="flex gap-3">
+                <div className="text-xl font-medium mb-6 text-gray-500">
+                  $ {salePrice}
+                </div>
+                <div className="text-xl font-medium mb-6 text-red-500 line-through">
+                  $ {productPrice}
+                </div>
                 </div>
                 <p className="mb-8">{description}</p>
                 <button
-                  onClick={() => addToCart(product, product.id)}
+                  onClick={() => addToCart(product, _id)}
                   className="bg-primary py-4 px-8 text-white rounded-md hover:bg-gray-300 hover:text-black"
                 >
                   Add to cart

@@ -10,12 +10,14 @@ const Detail = () => {
   const { id } = useParams();
   const { products } = useContext(ProductContext);
   const { addToCart } = useContext(CartContext);
-  
 
   const product = products.find((item) => {
-    return item.id === parseInt(id);
+    return item._id === id;
   });
-  //if product is not found
+
+  console.log(product)
+
+  // if products is not found
 
   if (!product) {
     return (
@@ -25,23 +27,27 @@ const Detail = () => {
     );
   }
 
-  const { image, title, description, price } = product;
+  const { images, title, description, productPrice } = product;
+
+  const image = images && images.length > 0 ? images[0] : null;
+  console.log(image)
+
   return (
     <section className="pt-32 pb-12 lg:py-32 flex items-center">
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row items-center">
           <motion.div variants={fadeIn("down", 0.2)} initial="hidden" whileInView={"show"} viewport={{once:false,amount:0.7}}>
              <div className="flex flex-1 items-center justify-center mb-8 lg:mb-0">
-            <img className="max-w-[100px] scale-75 hover:scale-100 duration-700 overflow-clip lg:max-w-sm" src={image} alt="" />
+            <img className="max-w-[100px] scale-75 hover:scale-100 duration-700 overflow-clip lg:max-w-sm" src={image.url} alt="" />
           </div>
           </motion.div>
          
           <div className="flex-1 py-16 ml-10 text-center lg:text-left">
             <motion.div variants={fadeIn("up", 0.2)} initial="hidden" whileInView={"show"} viewport={{once:false,amount:0.7}}>
             <h1 className="text-[26px] font-medium max-w-[450px] mx-auto lg:mx-0">{title}</h1>
-            <div className="text-xl font-medium mb-6 text-red-500">$ {price}</div>
+            <div className="text-xl font-medium mb-6 text-red-500">$ {productPrice}</div>
             <p className="mb-8">{description}</p>
-            <button onClick={()=>addToCart(product,product.id)} className="bg-primary py-4 px-8 text-white rounded-md hover:bg-gray-300 hover:text-black">Add to cart</button>  
+            <button onClick={()=>addToCart(product,id)} className="bg-primary py-4 px-8 text-white rounded-md hover:bg-gray-300 hover:text-black">Add to cart</button>  
             </motion.div>
           </div>
         </div>

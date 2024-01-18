@@ -5,14 +5,19 @@ import "./index.css";
 import ProductProvider from "./Contexts/ProductContext.jsx";
 import SidebarProvider from "./Contexts/SidebarContext.jsx";
 import CardProvider from "./Contexts/CardContext.jsx";
+import { AuthProvider } from "./Contexts/AuthContext.jsx";
+import BrandProvider from "./Contexts/BrandsContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <SidebarProvider>
-    <CardProvider>
-      <ProductProvider>
-      <App />
-    </ProductProvider>
-    </CardProvider>
-    
-  </SidebarProvider>
+  <AuthProvider>
+      <BrandProvider>
+    <SidebarProvider>
+        <CardProvider>
+          <ProductProvider>
+            <App />
+          </ProductProvider>
+        </CardProvider>
+    </SidebarProvider>
+      </BrandProvider>
+  </AuthProvider>
 );
