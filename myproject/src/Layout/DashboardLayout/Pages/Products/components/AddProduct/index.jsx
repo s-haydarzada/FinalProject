@@ -9,7 +9,7 @@ import MultipleFileConverter from "./../../../../../../utils/MultipleFileConvert
 import { BrandContext } from "../../../../../../Contexts/BrandsContext";
 import { UploadOutlined } from '@ant-design/icons';
 
-const AddProduct = ({ open, setOpen, size }) => {
+const AddProduct = ({ open, setOpen, size,setRowData }) => {
   const { brands, setBrands } = useContext(BrandContext);
   const [showAlert, setShowAlert] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -24,9 +24,6 @@ const AddProduct = ({ open, setOpen, size }) => {
     fetchBrands();
   }, []);
 
-  // const updateBrandsList = (newBrand) => {
-  //   setBrands((prevBrands) => [...prevBrands, newBrand]);
-  // };
 
   const { setFieldValue, handleSubmit, handleReset } = useFormik({
     initialValues: {
@@ -52,7 +49,7 @@ const AddProduct = ({ open, setOpen, size }) => {
 
         const response = await ProductsCall(values);
         const newProduct = response.data;
-        // updateBrandsList(newProduct);
+        setRowData(newProduct);
         onClose();
       } catch (err) {
         console.error(err);

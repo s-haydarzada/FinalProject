@@ -3,7 +3,7 @@ import { Typography } from "antd";
 import { FaRegTrashCan, FaPlus } from "react-icons/fa6";
 import AddProduct from '../AddProduct';
 
-const ProductHeader = () => {
+const ProductHeader = ({setRowData}) => {
     const [open, setOpen] = useState(false);
     const [size, setSize] = useState();
 
@@ -34,6 +34,7 @@ const ProductHeader = () => {
             setOpen={setOpen}
             size={size}
             setSize={setSize}
+            setRowData={setRowData}
           />
         </div>
       </div>

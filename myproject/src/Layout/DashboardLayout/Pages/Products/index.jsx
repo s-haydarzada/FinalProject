@@ -8,7 +8,7 @@ const Products = () => {
   
     return (
     <div className="p-4 h-screen overflow-y-auto scrollbar-hide">
-     <ProductHeader/>
+     <ProductHeader setRowData={setRowData}/>
       <FormInputs rowData ={rowData} setRowData={setRowData}/>
       <MyTable />
     </div>
