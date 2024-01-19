@@ -12,7 +12,7 @@ const EditDrawer = ({
   setInitialValue,
   initialValue,
   editingProductId,
-  updateBrandsList,
+  updateList,
 }) => {
   const { brands } = useContext(BrandContext);
 
@@ -34,8 +34,7 @@ const EditDrawer = ({
       try {
         const response = await ProductsUpdate(editingProductId, values);
         const updateProduct = response.data;
-        console.log(updateProduct)
-        updateBrandsList(updateProduct);
+        updateList(updateProduct);
         setEditFormVisible(false);
       } catch (error) {
         console.error("Error updating product", error);
@@ -43,21 +42,6 @@ const EditDrawer = ({
     },
   });
 
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await DashboardProductsGetAll();
-  //       const productData = response.data;
-  //       console.log(productData)
-  //       setData(productData);
-  //     } catch (error) {
-  //       console.error("Error fetching brands", error);
-  //     }
-  //   };
-
-  //   getData();
-  // }, [updateBrandsList]);
 
   return (
     <Drawer

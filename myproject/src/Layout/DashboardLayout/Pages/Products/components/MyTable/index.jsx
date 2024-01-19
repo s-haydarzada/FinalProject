@@ -58,7 +58,7 @@ const MyTable = () => {
     },
     {
       title: "Brands",
-      dataIndex: "brands",
+      dataIndex: "brandName",
     },
     {
       title: "Price",
@@ -136,6 +136,10 @@ const MyTable = () => {
     },
   ];
 
+  const updateList = (newBrand) => {
+    setData((prevBrands) => [...prevBrands, newBrand]);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await PaginationAll(pagination.page, pagination.perPage);
@@ -157,7 +161,7 @@ const MyTable = () => {
     };
 
     fetchData();
-  }, [pagination.page, pagination.perPage]);
+  }, [pagination.page, pagination.perPage,updateList]);
 
   const handlePageChange = (page, perPage) => {
     setPagination((prevPagination) => ({
@@ -237,10 +241,7 @@ const MyTable = () => {
       console.log(error);
     }
   };
-
-  const updateList = (newBrand) => {
-    setData((prevBrands) => [...prevBrands, newBrand]);
-  };
+  
 
   return (
     <div className="w-full overflow-x-auto scrollbar-hide mb-24">
@@ -254,6 +255,7 @@ const MyTable = () => {
         columns={columns}
         pagination={false}
         dataSource={data.map((item) => ({
+          
           ...item,
           ...switchStates.find((state) => state.key === item._id),
         }))}

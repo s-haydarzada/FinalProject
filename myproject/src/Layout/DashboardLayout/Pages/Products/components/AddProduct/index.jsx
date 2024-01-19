@@ -7,12 +7,18 @@ import {
 } from "../../../../../../services/products";
 import MultipleFileConverter from "./../../../../../../utils/MultipleFileConverter";
 import { BrandContext } from "../../../../../../Contexts/BrandsContext";
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from "@ant-design/icons";
 
-const AddProduct = ({ open, setOpen, size,setRowData }) => {
+const AddProduct = ({ open, setOpen, size, setRowData,rowData }) => {
+  const singleData = rowData.product;
   const { brands, setBrands } = useContext(BrandContext);
   const [showAlert, setShowAlert] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const getBrandNameById = (brandId) => {
+    const brand = brands.find((brand) => brand._id === brandId);
+    return brand ? brand.name : null;
+  };
 
   useEffect(() => {
     const fetchBrands = async () => {
@@ -23,7 +29,6 @@ const AddProduct = ({ open, setOpen, size,setRowData }) => {
 
     fetchBrands();
   }, []);
-
 
   const { setFieldValue, handleSubmit, handleReset } = useFormik({
     initialValues: {
@@ -49,7 +54,15 @@ const AddProduct = ({ open, setOpen, size,setRowData }) => {
 
         const response = await ProductsCall(values);
         const newProduct = response.data;
-        setRowData(newProduct);
+        const brandName = getBrandNameById(newProduct.brandId);
+        const updatedRowData = {
+          ...rowData,
+          ...newProduct,
+          brandName: brandName,
+         
+        };
+        console.log(updatedRowData)
+        setRowData(updatedRowData);
         onClose();
       } catch (err) {
         console.error(err);

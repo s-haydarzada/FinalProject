@@ -62,7 +62,7 @@ const BrandDrawer = ({
               className="py-2 px-5 mt-10 rounded-md flex bg-green-500 text-white"
               type="submit"
             >
-              Submit
+              Create
             </button>
           </div>
         </form>

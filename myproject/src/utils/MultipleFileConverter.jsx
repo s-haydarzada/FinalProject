@@ -1,5 +1,6 @@
 export default function MultipleFileConverter(e){
     const files = e.target.files;
+    console.log(files)
     const filePromises = [];
 
     for (let i = 0; i<files.length;i++){

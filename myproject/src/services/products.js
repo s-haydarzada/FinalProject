@@ -9,6 +9,7 @@ export const BrandsCall = async (params) => {
     return data;
 };
 
+
 export const BrandsGetAll = async () => {
     let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/dashboard/brands`);
     return data;

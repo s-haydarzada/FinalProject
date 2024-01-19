@@ -23,3 +23,21 @@ export const ProfileCall = async () => {
     );
     return data;
 };
+
+export const AdminsCall = async (params) => {
+    let { data } = await API.post(
+        `/${import.meta.env.VITE_API_KEY}/dashboard/register`,
+        params
+    );
+    return data;
+};
+
+export const AdminsGetAll = async () => {
+    let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/dashboard/users`);
+    return data;
+}
+
+export const DeleteAdmin = async (id) => {
+    let {data}=await API.delete(`${import.meta.env.VITE_API_KEY}/dashboard/users/${id}`);
+    return data;
+    }

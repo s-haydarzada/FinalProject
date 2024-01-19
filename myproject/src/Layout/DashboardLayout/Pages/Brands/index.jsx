@@ -107,8 +107,9 @@ const Brands = () => {
     const getData = async () => {
       try {
         const response = await BrandsGetAll();
-        const brandData = response.data;
-        setBrands(brandData);
+        // const brandData = response.data;
+        const brands = response.data.map(brand => ({ ...brand, name: brand.brandName }));
+        setBrands(brands);
       } catch (error) {
         console.error("Error fetching brands", error);
       }
@@ -154,7 +155,7 @@ const Brands = () => {
             className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-4 py-2 text-sm text-white bg-emerald-500 border border-transparent active:bg-emerald-600 hover:bg-emerald-600 w-[150px] rounded-md h-12"
           >
             <FaPlus size={18} />
-            <span className="ml-2">Add Product</span>
+            <span className="ml-2">Add Brand</span>
           </button>
           <BrandDrawer
             setOpen={setOpen}
