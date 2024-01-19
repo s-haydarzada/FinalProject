@@ -39,7 +39,11 @@ export const ProductsCall = async (params) => {
 export const ProductsGetAll = async () => {
     let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/site/products`);
     return data;
+}
 
+export const GetSingleProduct = async (id) => {
+    let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/site/products/${id}`);
+    return data;
 }
 
 export const AddNewBasket = async (params) => {
@@ -59,8 +63,8 @@ export const PaginationAll = async (page, perPage) => {
 }
 
 export const DeleteProduct = async (id) => {
-let {data}=await API.delete(`${import.meta.env.VITE_API_KEY}/dashboard/products/${id}`);
-return data;
+    let { data } = await API.delete(`${import.meta.env.VITE_API_KEY}/dashboard/products/${id}`);
+    return data;
 }
 
 
@@ -72,3 +76,7 @@ export const ProductsUpdate = async (id, params) => {
     return data;
 };
 
+export const ProductSearching=async(search)=>{
+    let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/dashboard/products?search=${search}`);
+    return data;
+}

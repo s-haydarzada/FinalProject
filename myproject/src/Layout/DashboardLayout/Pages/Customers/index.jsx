@@ -1,14 +1,15 @@
-import { Space, Table, Typography } from "antd";
+import { Space, Spin, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaRegTrashCan } from "react-icons/fa6";
 import { IoTrashOutline } from "react-icons/io5";
-import AdminsDrawer from "./AdminsDrawer";
 import { AdminsGetAll, DeleteAdmin } from "../../../../services/auth";
+import AdminsDrawer from './Drawer/index';
 
 const Customer = () => {
   const [selectionType, setSelectionType] = useState("checkbox");
   const [show, setShow] = useState(false);
   const [admin, setAdmin] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const ShowAdminsModal = () => {
     setShow(true);
@@ -52,21 +53,21 @@ const Customer = () => {
     },
   ];
 
-  
   const updateAdminList = (newAdmin) => {
     setAdmin((prev) => [...prev, newAdmin]);
   };
-
 
   useEffect(() => {
     const getData = async () => {
       try {
         const response = await AdminsGetAll();
         const adminData = response.data;
-        updateAdminList(adminData)
+        updateAdminList(adminData);
         setAdmin(adminData);
       } catch (error) {
         console.error("Error fetching brands", error);
+      } finally {
+        setLoading(false);
       }
     };
     getData();
@@ -77,7 +78,7 @@ const Customer = () => {
     try {
       await DeleteAdmin(id);
       const deletedAdmin = admin.filter((item) => item._id !== id);
-      updateAdminList(deletedAdmin)
+      updateAdminList(deletedAdmin);
       setAdmin(deletedAdmin);
       // setSelectedRowKeys((prevDeletedRowKeys) => [...prevDeletedRowKeys, id]);
     } catch (error) {
@@ -124,18 +125,22 @@ const Customer = () => {
         </div>
       </div>
       <div className="mt-10 mx-1">
-        <Table
-        key="_id"
-          rowSelection={{
-            type: selectionType,
-            ...rowSelection,
-          }}
-          columns={columns}
-          dataSource={admin.map((item, index) => ({
-            ...item,
-            key: index.toString(),
-          }))}
-        />
+        {loading ? (
+          <Spin className="flex justify-center items-center mt-20" size="middle" />
+        ) : (
+          <Table
+            key="_id"
+            rowSelection={{
+              type: selectionType,
+              ...rowSelection,
+            }}
+            columns={columns}
+            dataSource={admin.map((item, index) => ({
+              ...item,
+              key: index.toString(),
+            }))}
+          />
+        )}
       </div>
     </div>
   );

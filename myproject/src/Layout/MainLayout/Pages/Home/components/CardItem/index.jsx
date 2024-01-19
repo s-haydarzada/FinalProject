@@ -18,7 +18,8 @@ const CardItem = ({ product, customStyle }) => {
 
   const { images, productPrice, salePrice, title, _id } = product;
 
-  const image = images && images.length > 0 ? images[0] : null;
+  const firstImage = images && images.length > 0 ? images[0] : null;
+  const imageUrl = firstImage ? firstImage.url : null;
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -59,7 +60,7 @@ const CardItem = ({ product, customStyle }) => {
               
               <img
                 className="h-full w-full object-contain"
-                src={image.url}
+                src={imageUrl}
                 alt=""
               />
             </Link>

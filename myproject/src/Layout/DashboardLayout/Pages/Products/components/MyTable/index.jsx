@@ -5,9 +5,14 @@ import { LiaSearchPlusSolid } from "react-icons/lia";
 import { FiEdit } from "react-icons/fi";
 import { IoTrashOutline } from "react-icons/io5";
 import EditDrawer from "./../EditDrawer/index";
-import { DeleteProduct, PaginationAll } from "../../../../../../services/products";
+import {
+  DeleteProduct,
+  PaginationAll,
+  ProductSearching,
+} from "../../../../../../services/products";
+import { FaSearchPlus } from "react-icons/fa";
 
-const MyTable = () => {
+const MyTable = ({ rowData, setRowData }) => {
   const [selectionType, setSelectionType] = useState("checkbox");
   const [pagination, setPagination] = useState({
     page: 1,
@@ -15,7 +20,7 @@ const MyTable = () => {
     totalCount: 0,
   });
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(rowData);
   const [switchStates, setSwitchStates] = useState([]);
 
   //UPDATE PRODUCTS START
@@ -58,7 +63,7 @@ const MyTable = () => {
     },
     {
       title: "Brands",
-      dataIndex: "brandName",
+      dataIndex: "brandId",
     },
     {
       title: "Price",
@@ -83,11 +88,11 @@ const MyTable = () => {
     },
     {
       title: "View",
-      dataIndex: "view",
+      dataIndex: "_id",
       render: (text) => (
-        <Link>
+        <Link to={`/product/${text}`}>
           <span className="text-lg text-gray-500">
-            <LiaSearchPlusSolid />
+            <FaSearchPlus />
           </span>
         </Link>
       ),
@@ -145,6 +150,7 @@ const MyTable = () => {
       const res = await PaginationAll(pagination.page, pagination.perPage);
       const result = res.data;
       setData(result.product);
+      setData(rowData)
 
       setSwitchStates(
         result.product.map((item) => ({
@@ -161,7 +167,7 @@ const MyTable = () => {
     };
 
     fetchData();
-  }, [pagination.page, pagination.perPage,updateList]);
+  }, [pagination.page, pagination.perPage, updateList,rowData]);
 
   const handlePageChange = (page, perPage) => {
     setPagination((prevPagination) => ({
@@ -241,7 +247,6 @@ const MyTable = () => {
       console.log(error);
     }
   };
-  
 
   return (
     <div className="w-full overflow-x-auto scrollbar-hide mb-24">
@@ -255,7 +260,6 @@ const MyTable = () => {
         columns={columns}
         pagination={false}
         dataSource={data.map((item) => ({
-          
           ...item,
           ...switchStates.find((state) => state.key === item._id),
         }))}

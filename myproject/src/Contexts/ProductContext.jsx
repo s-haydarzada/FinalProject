@@ -20,7 +20,7 @@ useEffect(()=>{
   fetchProducts();
 },[])
 
-  return <ProductContext.Provider value={{products}}>
+  return <ProductContext.Provider value={{products,setProducts}}>
     {children}
   </ProductContext.Provider>
 }

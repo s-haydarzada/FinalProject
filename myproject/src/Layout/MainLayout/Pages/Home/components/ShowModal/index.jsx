@@ -12,6 +12,9 @@ const ShowModal = ({ isModalOpen, setIsModalOpen,product}) => {
   
 
   const { images, title, description, productPrice,_id,salePrice } = product;
+  const firstImage = images && images.length > 0 ? images[0] : null;
+  const imageUrl = firstImage ? firstImage.url : null;
+
   if (!product) {
     return null;
   }
@@ -25,7 +28,7 @@ const ShowModal = ({ isModalOpen, setIsModalOpen,product}) => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    removeFromCart(_id);
+    // removeFromCart(_id);
   };
 
   return (
@@ -48,7 +51,7 @@ const ShowModal = ({ isModalOpen, setIsModalOpen,product}) => {
               <div className="flex items-center justify-center mb-8 lg:mb-0 border p-2">
                 <img
                   className="max-w-[200px] w-full h-[300px] lg:max-w-sm"
-                  src={image.url}
+                  src={imageUrl}
                   alt=""
                 />
               </div>

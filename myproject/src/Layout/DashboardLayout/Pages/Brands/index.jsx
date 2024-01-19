@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Space, Table, Typography } from "antd";
+import { Space, Spin, Table, Typography } from "antd";
 import { FaRegTrashCan, FaPlus } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import { IoTrashOutline } from "react-icons/io5";
@@ -12,7 +12,8 @@ const Brands = () => {
   const [selectionType, setSelectionType] = useState("checkbox");
   const [brands, setBrands] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  
+  const [loading, setLoading] = useState(true);
+
   //UPDATE OPERATION START
   const [editingBrandId, setEditingBrandId] = useState(null);
   const [editFormVisible, setEditFormVisible] = useState(false);
@@ -20,15 +21,15 @@ const Brands = () => {
     name: "",
     image: "",
   });
-  
+
   const handleEdit = (record) => {
     setEditingBrandId(record._id);
     setInitialValues({
-        name: record.name,
-        image: record.image,
-    })
+      name: record.name,
+      image: record.image,
+    });
     setEditFormVisible(true);
-};
+  };
 
   //UPDATE OPERATION END
 
@@ -107,17 +108,22 @@ const Brands = () => {
     const getData = async () => {
       try {
         const response = await BrandsGetAll();
-        // const brandData = response.data;
-        const brands = response.data.map(brand => ({ ...brand, name: brand.brandName }));
+        const brandData = response.data;
+        const brands = brandData.map((brand) => ({
+          ...brand,
+          name: brand.brandName,
+        }));
         setBrands(brands);
       } catch (error) {
         console.error("Error fetching brands", error);
+      } finally {
+        setLoading(false);
       }
     };
     getData();
   }, []);
 
-
+  console.log(brands)
 
   //Delete Brands
   const deleteBrand = async (id) => {
@@ -165,17 +171,21 @@ const Brands = () => {
         </div>
       </div>
       <div className="mt-10 mx-1">
-        <Table
-          rowSelection={{
-            type: selectionType,
-            ...rowSelection,
-          }}
-          columns={columns}
-          dataSource={brands.map((brand, index) => ({
-            ...brand,
-            key: index.toString(),
-          }))}
-        />
+        {loading ? (
+          <Spin className="flex justify-center items-center mt-20" size="middle"  />
+        ) : (
+          <Table
+            rowSelection={{
+              type: selectionType,
+              ...rowSelection,
+            }}
+            columns={columns}
+            dataSource={brands.map((brand, index) => ({
+              ...brand,
+              key: index.toString(),
+            }))}
+          />
+        )}
       </div>
     </div>
   );
