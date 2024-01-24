@@ -15,7 +15,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      if (user.role === "superadmin") {
+      if (user.role === "superadmin" || user.role==="admin") {
         navigate("/dashboard");
       } else if (user.role === "client") {
         navigate("/");

@@ -77,6 +77,7 @@ const SingleBrand = () => {
     }
   };
 
+
   return (
     <section className="w-full h-[200px] flex items-center relative group overflow-auto mt-20">
       <div ref={element} className="container mx-auto max-w-screen h-full flex items-center transition-colors duration-300 overflow-x-auto scrollbar-hide">

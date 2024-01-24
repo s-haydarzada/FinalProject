@@ -10,14 +10,14 @@ import BrandProvider from "./Contexts/BrandsContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
-      <BrandProvider>
-    <SidebarProvider>
-        <CardProvider>
+    <BrandProvider>
+      <CardProvider>
+        <SidebarProvider>
           <ProductProvider>
             <App />
           </ProductProvider>
-        </CardProvider>
-    </SidebarProvider>
-      </BrandProvider>
+        </SidebarProvider>
+      </CardProvider>
+    </BrandProvider>
   </AuthProvider>
 );

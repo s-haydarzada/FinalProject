@@ -31,6 +31,7 @@ const Brands = () => {
     setEditFormVisible(true);
   };
 
+
   //UPDATE OPERATION END
 
   const columns = [
@@ -122,8 +123,6 @@ const Brands = () => {
     };
     getData();
   }, []);
-
-  console.log(brands)
 
   //Delete Brands
   const deleteBrand = async (id) => {

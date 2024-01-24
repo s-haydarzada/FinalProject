@@ -12,7 +12,7 @@ import {
 } from "../../../../../../services/products";
 import { FaSearchPlus } from "react-icons/fa";
 
-const MyTable = ({ rowData, setRowData }) => {
+const MyTable = ({ rowData, setRowData,query }) => {
   const [selectionType, setSelectionType] = useState("checkbox");
   const [pagination, setPagination] = useState({
     page: 1,
@@ -20,9 +20,8 @@ const MyTable = ({ rowData, setRowData }) => {
     totalCount: 0,
   });
 
-  const [data, setData] = useState(rowData);
+  const [tabledata, setTableData] = useState([]);
   const [switchStates, setSwitchStates] = useState([]);
-
   //UPDATE PRODUCTS START
   const [editFormVisible, setEditFormVisible] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
@@ -128,7 +127,7 @@ const MyTable = ({ rowData, setRowData }) => {
             editingProductId={editingProductId}
             setEditingProductId={setEditingProductId}
             updateList={updateList}
-            setData={setData}
+            // setData={setData}
           />
           <button
             onClick={() => deleteProduct(record._id)}
@@ -142,15 +141,14 @@ const MyTable = ({ rowData, setRowData }) => {
   ];
 
   const updateList = (newBrand) => {
-    setData((prevBrands) => [...prevBrands, newBrand]);
+    setTableData((prevBrands) => [...prevBrands, newBrand]);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await PaginationAll(pagination.page, pagination.perPage);
       const result = res.data;
-      setData(result.product);
-      setData(rowData)
+      setTableData(result.product);
 
       setSwitchStates(
         result.product.map((item) => ({
@@ -168,6 +166,19 @@ const MyTable = ({ rowData, setRowData }) => {
 
     fetchData();
   }, [pagination.page, pagination.perPage, updateList,rowData]);
+
+  
+  useEffect(() => {
+    const searching = async () => {
+      const search = await ProductSearching(query);
+      const searchData = search.data.product;
+      console.log(searchData)
+      setRowData(searchData);
+    };
+    searching();
+  }, [query]);
+
+
 
   const handlePageChange = (page, perPage) => {
     setPagination((prevPagination) => ({
@@ -241,8 +252,8 @@ const MyTable = ({ rowData, setRowData }) => {
   const deleteProduct = async (id) => {
     try {
       await DeleteProduct(id);
-      const deletedData = data.filter((item) => item._id !== id);
-      setData(deletedData);
+      const deletedData = tabledata.filter((item) => item._id !== id);
+      setRowData(deletedData);
     } catch (error) {
       console.log(error);
     }
@@ -259,7 +270,7 @@ const MyTable = ({ rowData, setRowData }) => {
         }}
         columns={columns}
         pagination={false}
-        dataSource={data.map((item) => ({
+        dataSource={tabledata.map((item) => ({
           ...item,
           ...switchStates.find((state) => state.key === item._id),
         }))}

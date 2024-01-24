@@ -1,29 +1,75 @@
 import { Breadcrumb } from "antd";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaList } from "react-icons/fa";
 import { ProductContext } from "../../../../Contexts/ProductContext";
 import CardItem from "../Home/components/CardItem";
 import { Pagination } from "antd";
+import { ProductFilterAndSearching } from "../../../../services/products";
+import { BrandContext } from "../../../../Contexts/BrandsContext";
+import { useFormik } from "formik";
 
 const Shop = () => {
-  const { products } = useContext(ProductContext);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const { products, setProducts } = useContext(ProductContext);
+  const { brands } = useContext(BrandContext);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
+  const [filterOptions, setFilterOptions] = useState({
+    page: 1,
+    perPage: 10,
+    minPrice: "",
+    maxPrice: "",
+    stock: false,
+    brand: "",
+    totalCount: 0,
+  });
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const { setFieldValue, handleSubmit, handleReset } = useFormik({
+    initialValues: {
+      page: 1,
+      perPage: 10,
+      minPrice: null,
+      maxPrice: null,
+      stock: false,
+      outStock: false,
+      totalCount: 0,
+    },
+    onSubmit: async (values) => {
+      console.log(values);
 
-  const item = {
-    type: "separator",
-    separator: ">",
-  };
+      try {
+        const filteredProducts = await ProductFilterAndSearching(
+          values.page,
+          values.perPage,
+          values.minPrice,
+          values.maxPrice,
+          values.stock,
+        );
+        console.log(filteredProducts.data.product);
+        setFilterOptions(filteredProducts.data.product);
+        setFilterOptions((prevOptions) => ({
+          ...prevOptions,
+          page: filteredProducts.page,
+          totalCount: filteredProducts.totalCount,
+        }));
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  });
+
+  useEffect(() => {
+    ProductFilterAndSearching(
+      filterOptions.page,
+      filterOptions.perPage,
+      filterOptions.minPrice,
+      filterOptions.maxPrice,
+      filterOptions.stock,
+    );
+  }, [filterOptions]);
+
+  console.log(filterOptions)
+
   return (
     <section className="pt-32 pb-12 lg:py-32 flex flex-col overscroll-y-auto scrollbar-hide">
       <Breadcrumb
@@ -41,71 +87,82 @@ const Shop = () => {
         <div className="px-12 py-20 h-auto">
           <div className="grid grid-cols-3 gap-10">
             <div>
-              <form action="" className="w-full">
+              <form className="w-full" onSubmit={handleSubmit}>
                 <div className="border p-4 mb-5">
-                  <h3 class="mb-4 mx-3 text-left text-2xl italic">
-                    Technology
+                  <h3 className="mb-4 mx-3 text-left text-2xl italic">
+                    Availability
                   </h3>
-                  <ul class="w-40 text-sm font-medium">
-                    <li class="w-full rounded-t-lg">
-                      <div class="flex items-center ps-3">
+                  <ul className="w-40 text-sm font-medium">
+                    <li className="w-full rounded-t-lg">
+                      <div className="flex items-center ps-3">
                         <input
-                          id="vue-checkbox"
+                          id="availability"
                           type="checkbox"
-                          value=""
-                          class="w-4 h-4 text-blue-600 bg-gray-100 rounded"
+                          name="stock"
+                          onChange={(e) => {
+                            setFieldValue("stock", e.target.checked);
+                          }}
+                          className="w-4 h-4 text-blue-600 bg-gray-100 rounded"
                         />
                         <label
-                          for="vue-checkbox"
-                          class="w-full py-3 ms-2 text-sm font-medium"
+                          htmlFor="react-checkbox"
+                          className="w-full py-3 ms-2 text-sm font-medium"
                         >
-                          Out of Stock (27)
+                          Stock (21)
                         </label>
                       </div>
                     </li>
-                    <li class="w-full rounded-t-lg">
-                      <div class="flex items-center ps-3">
+                    <li className="w-full rounded-t-lg">
+                      <div className="flex items-center ps-3">
                         <input
-                          id="react-checkbox"
+                          id="outStock"
+                          name="stock"
                           type="checkbox"
-                          value=""
-                          class="w-4 h-4 text-blue-600 bg-gray-100 rounded"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 rounded"
+                          onChange={(e) => {
+                            setFieldValue("outStock", e.target.checked);
+                          }}
                         />
+
                         <label
-                          for="react-checkbox"
-                          class="w-full py-3 ms-2 text-sm font-medium"
+                          htmlFor="vue-checkbox"
+                          className="w-full py-3 ms-2 text-sm font-medium"
                         >
-                          Stock (21)
+                          Out of Stock (27)
                         </label>
                       </div>
                     </li>
                   </ul>
                 </div>
                 <div className="border p-2 mb-5">
-                  <h3 class="mb-4 mx-3 text-left text-2xl italic">Price</h3>
-                  <div class="sidebar-list-style">
-                    <div class="checkbox-container categories-list sidebar-price-filter flex">
-                      <div class="filter-range-from">
+                  <h3 className="mb-4 mx-3 text-left text-2xl italic">Price</h3>
+                  <div className="sidebar-list-style">
+                    <div className="checkbox-container categories-list sidebar-price-filter flex">
+                      <div className="filter-range-from">
                         <span className="mr-1">$</span>
                         <input
-                          name="filter.v.price.gte"
-                          id="Filter-Price-2"
+                          name="minPrice"
                           type="number"
                           placeholder="0"
                           min="0"
-                          max="110.00"
+                          max="1000000"
+                          onChange={(e) => {
+                            setFieldValue("minPrice", e.target.value);
+                          }}
                         />
                         <label className="mx-2">From</label>
                       </div>
-                      <div class="filter-price-range-to">
+                      <div className="filter-price-range-to">
                         <span className="mr-1">$</span>
                         <input
-                          name="filter.v.price.lte"
-                          id="Filter-Price-2"
+                          name="maxPrice"
                           type="number"
                           placeholder="110.00"
                           min="0"
-                          max="110.00"
+                          max="1000000"
+                          onChange={(e) => {
+                            setFieldValue("maxPrice", e.target.value);
+                          }}
                         />
                         <label className="ml-1">To</label>
                       </div>
@@ -118,43 +175,35 @@ const Shop = () => {
                     </button>
                   </div>
                 </div>
-                <div className="border p-4 mb-5">
-                  <h3 class="mb-4 mx-3 text-left text-2xl italic">Brands</h3>
-                  <ul class="w-72 text-sm font-medium">
-                    <li class="w-full rounded-t-lg">
-                      <div class="flex items-center ps-3">
-                        <input
-                          id="vue-checkbox"
-                          type="checkbox"
-                          value=""
-                          class="w-4 h-4 text-blue-600 bg-gray-100 rounded"
-                        />
-                        <label
-                          for="vue-checkbox"
-                          class="w-full py-3 ms-2 text-sm text-[#505050]"
-                        >
-                          Adidas (27)
-                        </label>
-                      </div>
-                    </li>
-                    <li class="w-full rounded-t-lg">
-                      <div class="flex items-center ps-3">
-                        <input
-                          id="react-checkbox"
-                          type="checkbox"
-                          value=""
-                          class="w-4 h-4 text-blue-600 bg-gray-100 rounded"
-                        />
-                        <label
-                          for="react-checkbox"
-                          class="w-full py-3 ms-2 text-sm text-[#505050]"
-                        >
-                          Nike (21)
-                        </label>
-                      </div>
-                    </li>
+                {/* <div className="border p-4 mb-5">
+                  <h3 className="mb-4 mx-3 text-left text-2xl italic">
+                    Brands
+                  </h3>
+                  <ul className="w-72 text-sm font-medium">
+                    {brands.map((brand) => (
+                      <li key={brand.id} className="w-full rounded-t-lg">
+                        <div className="flex items-center ps-3">
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 text-blue-600 bg-gray-100 rounded"
+                            name="brandId"
+                            value={brand.name}
+                            onChange={(e) => {
+                              setFieldValue("brandId", e.target.value);
+                            }}
+                          />
+
+                          <label
+                            htmlFor={`brand-checkbox-${brand.id}`}
+                            className="w-full py-3 ms-2 text-sm text-[#505050]"
+                          >
+                            {brand.name} (27)
+                          </label>
+                        </div>
+                      </li>
+                    ))}
                   </ul>
-                </div>
+                </div> */}
               </form>
             </div>
             <div className="col-span-2 flex flex-col">
@@ -169,13 +218,14 @@ const Shop = () => {
                     </button>
                   </div>
                   <div className="product-short">
-                    <label for="SortBy" className="mr-3">
+                    <label htmlFor="SortBy" className="mr-3">
                       Sort by
                     </label>
                     <select
                       name="SortBy"
                       id="SortBy"
                       className="outline-none border-neutral-300 focus:border-neutral-300"
+                      onChange={() => sortProductsByPrice()}
                     >
                       <option value="title-ascending">
                         Alphabetically, A-Z
@@ -194,22 +244,26 @@ const Shop = () => {
                 </div>
               </div>
               <div className="border w-full h-full border-gray-300 mt-10 flex flex-wrap">
-                {currentProducts.map((prod) => (
+                {products.map((prod) => (
                   <div
-                    key={prod.id}
+                    key={prod._id}
                     className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4"
                   >
-                    {/* Assuming you have a CardItem component */}
                     <CardItem product={prod} />
                   </div>
                 ))}
               </div>
               <div className="mt-4 flex justify-center">
                 <Pagination
-                  current={currentPage}
-                  pageSize={itemsPerPage}
-                  total={products.length}
-                  onChange={handlePageChange}
+                  current={filterOptions.page}
+                  pageSize={filterOptions.perPage}
+                  total={filterOptions.totalCount}
+                  onChange={(page) => {
+                    setFilterOptions((prevOptions) => ({
+                      ...prevOptions,
+                      page: page,
+                    }));
+                  }}
                 />
               </div>
             </div>

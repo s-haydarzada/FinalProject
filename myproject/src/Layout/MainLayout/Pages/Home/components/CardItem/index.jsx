@@ -13,23 +13,21 @@ import { IoHeart } from "react-icons/io5";
 
 const CardItem = ({ product, customStyle }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const { addToCart } = useContext(CartContext);
+  const { addToBasket, itemAmount } = useContext(CartContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { images, productPrice, salePrice, title, _id } = product;
 
-  const firstImage = images && images.length > 0 ? images[0] : null;
-  const imageUrl = firstImage ? firstImage.url : null;
+  const firstImage = images && images.length > 0 ? images[0] : [];
+  const imageUrl = firstImage ? firstImage.url : [];
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
   const handleAddToCart = () => {
-    addToCart(product, _id);
-    showMessage();
+    addToBasket(_id, 1, product);
   };
-
 
   const showMessage = () => {
     message.success("SUCCESSFULLY IS ADDED");
@@ -54,12 +52,11 @@ const CardItem = ({ product, customStyle }) => {
             style={{
               background: useMotionTemplate`radial-gradient(300px circle at ${mousePosition.x}px ${mousePosition.y}px,rgb(251,251,251), transparent 80%`,
             }}
-            className="h-full w-full mx-auto flex justify-center items-center relative" 
+            className="h-full w-full mx-auto flex justify-center items-center relative"
           >
             <Link to={`/product/${product._id}`}>
-              
               <img
-                className="h-full w-full object-contain"
+                className="h-[270px] w-full object-cover"
                 src={imageUrl}
                 alt=""
               />

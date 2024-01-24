@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Layout, Menu, Button, theme, Avatar, Badge } from "antd";
 import { RiMenuFoldFill, RiMenuUnfoldFill } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
@@ -10,6 +10,8 @@ import {
   HiOutlineViewGrid,
 } from "react-icons/hi";
 import { Outlet, useNavigate } from "react-router-dom";
+import UserProfile from "./components/Header/UserProfile";
+import { AuthContext } from "../../Contexts/AuthContext";
 const { Header, Sider, Content } = Layout;
 
 const Dashboard = () => {
@@ -18,6 +20,26 @@ const Dashboard = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const [open, setOpen] = useState(false);
+  const { user, setUser } = useContext(AuthContext);
+
+  const showProfile=()=>{
+    setOpen(true);
+    useEffect(() => {
+      const getUser = async () => {
+          try {
+              const accountProfile = await ProfileCall();
+              const infoProfile = accountProfile.data;
+              setUser(infoProfile);
+          } catch (error) {
+              console.log(error);
+          }
+      };
+      getUser();
+  }, []);
+  }
+
   return (
     <Layout>
       <Sider
@@ -50,8 +72,8 @@ const Dashboard = () => {
               icon: <HiOutlineShoppingCart />,
             },
             {
-              key: "/customers",
-              label: "Customers",
+              key: "/staff",
+              label: "Our Staff",
               icon: <HiOutlineUsers />,
             },
             {
@@ -85,7 +107,8 @@ const Dashboard = () => {
             }}
           />
           <Badge dot>
-          <Avatar className="flex justify-center items-center" shape="square" icon={<FaUser />} />
+          <Avatar onClick={()=>showProfile()} className="flex justify-center items-center cursor-pointer" shape="square" icon={<FaUser />} />
+          <UserProfile open={open} setOpen={setOpen} user={user} setUser = {setUser}/>
           </Badge>
         </Header>
         <Content

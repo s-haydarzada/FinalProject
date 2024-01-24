@@ -1,76 +1,135 @@
-import React, { createContext, useEffect, useState } from "react";
-import { AddNewBasket } from "../services/products";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { AddNewBasket, GetBasket } from "./../services/products";
+import { AuthContext } from "./AuthContext";
 
 export const CartContext = createContext();
 
 const CardProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [basket, setBasket] = useState([]);
   const [itemAmount, setItemAmount] = useState(0);
   const [total, setTotal] = useState(0);
 
-  useEffect(() => {
-    const total = cart.reduce((acc, curr) => {
-      return acc + curr.price * curr.amount;
-    },0);
-    setTotal(total)
-  },[]);
+  const { user } = useContext(AuthContext);
+
+  //Total
 
   useEffect(() => {
-    if (cart) {
-      const amount = cart.reduce((acc, currentItem) => {
-        return acc + currentItem.amount;
+    const total = basket.reduce((acc, curr) => {
+      return acc + curr.product?.productPrice * curr.productCount;
+    }, 0);
+    setTotal(total);
+  }, [basket]);
+
+  //ProductCount
+
+  useEffect(() => {
+    if (basket) {
+      const productCount = basket.reduce((acc, currentItem) => {
+        return acc + currentItem.productCount;
       }, 0);
-
-      setItemAmount(amount);
+      setItemAmount(productCount);
     }
-  }, [cart]);
+  }, [basket]);
 
-  const addToCart = (product, id) => {
-    const cartItem = cart.find((item) => item.id === id);
+//Add to Basket
 
-    if (cartItem) {
-      const newCart = cart.map((item) =>
-        item.id === id ? { ...item, amount: item.amount + 1 } : item
-      );
-      setCart(newCart);
+  const addToBasket = async (productId, productCount, product) => {
+    const existingProductIndex = basket.findIndex(
+      (item) => item.productId === productId
+    );
+
+    if (existingProductIndex !== -1) {
+      const updatedBasket = [...basket];
+      updatedBasket[existingProductIndex].productCount += productCount;
+      setBasket(updatedBasket);
     } else {
-      setCart([...cart, { ...product, amount: 1 }]);
+      const updatedBasket = [...basket, { productId, productCount, product }];
+      setBasket(updatedBasket);
+
+      if (user) {
+        await postBasketData(updatedBasket);
+        clearLocalStorage();
+      } else {
+        updateLocalStorage({ productId, productCount });
+      }
     }
   };
 
+
+//Post request to Basket
+
+  const postBasketData = async (updatedBasket) => {
+    try {
+      const response = await AddNewBasket({ basket: updatedBasket });
+      console.log(response);
+      clearLocalStorage();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+//Update localStorage
+
+  const updateLocalStorage = (item) => {
+    const localStorageItems = JSON.parse(localStorage.getItem("basket")) || [];
+    localStorageItems.push(item);
+    localStorage.setItem("basket", JSON.stringify(localStorageItems));
+  };
+
+  //Clear LocalStorage
+
+  const clearLocalStorage = () => {
+    localStorage.removeItem("basket");
+  };
+
+  //Get Basket Data
+
+  useEffect(() => {
+    const getBasketData = async () => {
+      try {
+        const res = await GetBasket();
+        console.log(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getBasketData();
+  }, []);
+
+  //Remove from Basket
 
   const removeFromCart = (id) => {
-    const newCart = cart.filter((item) => {
-      return item.id !== id;
+    const newCart = basket.filter((item) => {
+      return item.productId !== id;
     });
-    setCart(newCart);
+    setBasket(newCart);
   };
 
+  //Clear Basket
+
   const clearCart = () => {
-    setCart([]);
+    setBasket([]);
   };
 
   const increaseAmount = (id) => {
-    const cartItem = cart.find((item) => item.id === id);
-    addToCart(cartItem, id);
+    const cartItem = basket.find((item) => item.productId === id);
+    addToBasket(id, 1, cartItem.product);
   };
 
   const decreaseAmount = (id) => {
-    const cartItem = cart.find((item) => {
-      return item.id === id;
-    });
+    const cartItem = basket.find((item) => item.productId === id);
     if (cartItem) {
-      const newCart = cart.map((item) => {
-        if (item.id === id) {
-          return { ...item, amount: cartItem.amount - 1 };
+      const newCart = basket.map((item) => {
+        if (item.productId === id) {
+          return { ...item, productCount: cartItem.productCount - 1 };
         } else {
           return item;
         }
       });
-      setCart(newCart);
+      setBasket(newCart);
     }
 
-    if (cartItem.amount < 2) {
+    if (cartItem.productCount < 2) {
       removeFromCart(id);
     }
   };
@@ -78,9 +137,10 @@ const CardProvider = ({ children }) => {
   return (
     <CartContext.Provider
       value={{
-        cart,
+        basket,
+        addToBasket,
+        postBasketData,
         removeFromCart,
-        addToCart,
         clearCart,
         increaseAmount,
         decreaseAmount,

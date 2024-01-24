@@ -5,10 +5,9 @@ import {
   ProductSearching,
 } from "../../../../../../services/products";
 
-const FilteredSections = ({ rowData, setRowData, query, setQuery }) => {
+const FilteredSections = ({ rowData, setRowData, query, setQuery,filter,setFilter }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { brands, setBrands } = useContext(BrandContext);
-  const [inpSearch,setInpSearch]=useState([])
 
   const inputRef = useRef(null);
 
@@ -18,16 +17,6 @@ const FilteredSections = ({ rowData, setRowData, query, setQuery }) => {
     setQuery(inputVal);
   };
 
-  useEffect(() => {
-    const searching = async () => {
-      const search = await ProductSearching(query);
-      const searchData = search.data.product
-      setRowData(searchData);
-    };
-    searching();
-  }, [query]);
-
-console.log(rowData,query)
 
   return (
     <form

@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 const Sidebar = () => {
   const { isOpen, handleClose } = useContext(SidebarContext);
 
-  const { cart, clearCart, itemAmount, total } = useContext(CartContext);
+  const { basket, clearCart, itemAmount, total } = useContext(CartContext);
 
   return (
     <div
@@ -30,10 +30,12 @@ const Sidebar = () => {
           <IoMdArrowForward className="text-2xl" />
         </div>
       </div>
-      {cart && cart.length > 0 ? (
+      {basket && basket.length > 0 ? (
         <div className="flex flex-col gap-y-2 h-[320px] lg:h-[320px] overflow-y-auto overflow-x-hidden border-b">
-          {cart.map((item) => {
-            return <BasketItem item={item} key={item._id} />;
+          {basket.map((basketItem) => {
+            return (
+              <BasketItem key={basketItem.id} basketItem={basketItem} />
+            );
           })}
         </div>
       ) : (
@@ -61,13 +63,13 @@ const Sidebar = () => {
             to="/viewcart"
             className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
           >
-          ViewCart
+            ViewCart
           </Link>
           <Link
             to="/checkout"
             className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
           >
-          Checkout
+            Checkout
           </Link>
         </div>
       </div>

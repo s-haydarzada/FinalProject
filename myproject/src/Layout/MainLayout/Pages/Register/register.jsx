@@ -22,7 +22,6 @@ const Register = () => {
 
     onSubmit: values => {
       RegisterCall(values).then(({data})=>{
-        console.log(data);
         localStorage.setItem("token",data.token)
         setUser(data.user)
       }).catch((err)=>{
@@ -45,17 +44,17 @@ const Register = () => {
     },
   ];
 
-  const [formFields, setFormFields] = useState(formik);
+  // const [formFields, setFormFields] = useState(formik);
 
-  const { name, surname, password, email } = formFields;
-  const resetFormFields = () => {
-    setFormFields(initialValues)
-  }
+  // const { name, surname, password, email } = formFields;
+  // const resetFormFields = () => {
+  //   setFormFields(initialValues)
+  // }
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormFields({ ...formFields, [name]: value });
-  };
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormFields({ ...formFields, [name]: value });
+  // };
 
   return (
     <section className="w-full min-h-screen pt-28">

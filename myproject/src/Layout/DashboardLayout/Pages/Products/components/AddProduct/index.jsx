@@ -224,8 +224,6 @@ const AddProduct = ({ open, setOpen, size, setRowData,rowData }) => {
                     name="brandId"
                     onChange={(value) => {
                       setFieldValue("brandId", value);
-                     
-                  
                     }}
                   >
                     {brands.map((brand) => (

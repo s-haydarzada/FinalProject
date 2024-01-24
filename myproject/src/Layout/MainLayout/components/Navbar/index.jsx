@@ -9,10 +9,13 @@ import MenuItem from "../MenuItem/index";
 import { AiOutlineClose } from "react-icons/ai";
 import { SidebarContext } from "../../../../Contexts/SidebarContext";
 import { CartContext } from "../../../../Contexts/CardContext";
-import { Avatar } from "antd";
+import { Avatar, Badge } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import { AuthContext } from "../../../../Contexts/AuthContext";
+import Profile from "../Profile";
+import { ProfileCall } from "../../../../services/auth";
 
 const Navbar = () => {
-
   const [toggle, setToggle] = useState(false);
   const [isActivate, setIsActivate] = useState(true);
   const { isOpen, setIsOpen } = useContext(SidebarContext);
@@ -64,11 +67,30 @@ const Navbar = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
-      window.scrollY > 60 ? setIsActivate(true) : setIsActivate(false);
+      window.scrollY > 100 ? setIsActivate(true) : setIsActivate(false);
     });
   }, []);
 
+  const [open, setOpen] = useState(false);
+  const { user, setUser } = useContext(AuthContext);
 
+
+  const showUserProfile = () => {
+    setOpen(true);
+    useEffect(() => {
+      const getUser = async () => {
+        try {
+          const accountProfile = await ProfileCall();
+          const getProfile = accountProfile.data;
+          console.log(getProfile)
+          setUser(getProfile);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getUser();
+    }, []);
+  };
 
   return (
     <header
@@ -76,7 +98,7 @@ const Navbar = () => {
         isActivate ? "bg-white shadow-md" : "bg-none py-10"
       } fixed top-0 w-full z-10 transition-all`}
     >
-      <div className="py-3 px-12 w-full bg-white flex justify-between items-center my-5">
+      <div className="py-3 px-12 w-full bg-white flex justify-between items-center my-1">
         <div className="flex items-center gap-10">
           <Link to="https://boyka-demo.myshopify.com/">
             <img
@@ -99,6 +121,25 @@ const Navbar = () => {
             <MdShoppingCart />
             <span className="text-sm">Cart ({itemAmount})</span>
           </div>
+          {
+            user? <button onClick={() => showUserProfile()}>
+              <Avatar
+                className="cursor-pointer"
+                size="small"
+                style={{
+                  backgroundColor: "#87d068",
+                }}
+                icon={<UserOutlined />}
+              />
+          </button>:null
+          }
+         
+          <Profile
+            open={open}
+            setOpen={setOpen}
+            user={user}
+            setUser={setUser}
+          />
           <div className="md:hidden" onClick={() => setToggle(!toggle)}>
             {toggle ? (
               <AiOutlineClose className="text-gray-700 text-xl cursor-pointer" />

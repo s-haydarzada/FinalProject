@@ -8,7 +8,7 @@ import { fadeIn } from "../../../../../../_variants";
 
 const ShowModal = ({ isModalOpen, setIsModalOpen,product}) => {
   const { products } = useContext(ProductContext);
-  const { addToCart } = useContext(CartContext);
+  const { addToBasket } = useContext(CartContext);
   
 
   const { images, title, description, productPrice,_id,salePrice } = product;
@@ -78,7 +78,7 @@ const ShowModal = ({ isModalOpen, setIsModalOpen,product}) => {
                 </div>
                 <p className="mb-8">{description}</p>
                 <button
-                  onClick={() => addToCart(product, _id)}
+                  onClick={() => addToBasket(_id,1,product)}
                   className="bg-primary py-4 px-8 text-white rounded-md hover:bg-gray-300 hover:text-black"
                 >
                   Add to cart

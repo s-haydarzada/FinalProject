@@ -50,6 +50,15 @@ export const AddNewBasket = async (params) => {
     let { data } = await API.post(`${import.meta.env.VITE_API_KEY}/site/basket`, params);
     return data;
 }
+export const GetBasket = async () => {
+    let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/site/basket`);
+    return data;
+}
+
+export const UpdateBasket = async (id, params) => {
+    let { data } = await API.put(`${import.meta.env.VITE_API_KEY}/site/basket/${id}`, params);
+    return data;
+}
 
 export const DashboardProductsGetAll = async () => {
     let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/dashboard/products`);
@@ -76,7 +85,23 @@ export const ProductsUpdate = async (id, params) => {
     return data;
 };
 
-export const ProductSearching=async(search)=>{
+export const ProductSearching = async (search) => {
     let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/dashboard/products?search=${search}`);
+    return data;
+}
+
+export const ProductFilterAndSearching = async (page, perPage, minPrice, maxPrice, stock) => {
+    let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/site/products?page=${page}&perPage=${perPage}&minPrice=${minPrice}&maxPrice=${maxPrice}&stock=${stock}`);
+    return data;
+}
+
+
+export const PostOrders = async (params) => {
+    let { data } = await API.post(`${import.meta.env.VITE_API_KEY}/site/orders`,params);
+    return data;
+}
+
+export const GetOrders=async()=>{
+    let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/dashboard/orders`);
     return data;
 }
