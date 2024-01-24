@@ -16,17 +16,22 @@ const CardItem = ({ product, customStyle }) => {
   const { addToBasket, itemAmount } = useContext(CartContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { images, productPrice, salePrice, title, _id } = product;
+  const { images, productPrice, salePrice, title, _id, stock } = product;
+
+  const handleAddToCart = () => {
+    if (stock > 0) {
+      addToBasket(_id, 1, product);
+      showMessage();
+    } else {
+      message.error("Out of stock!");
+    }
+  };
 
   const firstImage = images && images.length > 0 ? images[0] : [];
   const imageUrl = firstImage ? firstImage.url : [];
 
   const showModal = () => {
     setIsModalOpen(true);
-  };
-
-  const handleAddToCart = () => {
-    addToBasket(_id, 1, product);
   };
 
   const showMessage = () => {
@@ -72,7 +77,12 @@ const CardItem = ({ product, customStyle }) => {
           </div>
         </div>
         <div className="absolute bottom-0 left-1 scale-0 group-hover:scale-110 p-2 flex justify-between w-[90%] items-center gap-y-2 opacity-0 group-hover:opacity-100 group-hover:scale-up-center duration-500">
-          <button onClick={handleAddToCart} type="submit">
+          <button
+            onClick={handleAddToCart}
+            type="submit"
+            disabled={stock === 0}
+            className="cursor-not-allowed"
+          >
             <div className="flex justify-center items-center text-white w-28 h-10">
               <BsPlus
                 style={customStyle}
@@ -83,6 +93,7 @@ const CardItem = ({ product, customStyle }) => {
               </span>
             </div>
           </button>
+
           <div>
             <IoHeart className="text-red-600 heart cursor-pointer" />
           </div>

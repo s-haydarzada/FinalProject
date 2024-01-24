@@ -60,12 +60,17 @@ const Detail = () => {
             whileInView={"show"}
             viewport={{ once: false, amount: 0.7 }}
           >
-            <div className="flex flex-1 items-center justify-center mb-8 lg:mb-0">
+            <div className="flex flex-1 h-[300px] items-center justify-center mb-8 lg:mb-0">
               <img
-                className="max-w-[100px] duration-700 overflow-clip lg:max-w-sm"
+                className="max-w-[100px] h-full duration-700 overflow-clip lg:max-w-sm"
                 src={firstImage.url}
                 alt=""
               />
+              <div>
+                {/* {singleItem.images.map((item)=>{
+                  <img src={item.url}/>
+                })} */}
+              </div>
             </div>
           </motion.div>
 
