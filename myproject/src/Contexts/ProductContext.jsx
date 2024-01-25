@@ -21,7 +21,18 @@ useEffect(()=>{
 },[])
 
 
-  return <ProductContext.Provider value={{products,setProducts}}>
+const calculateDiscountPercentage = (product) => {
+  const { productPrice, salePrice } = product;
+
+  if (productPrice > 0 && salePrice >= 0 && salePrice <= productPrice) {
+    return ((productPrice - salePrice) / productPrice) * 100;
+  } else {
+    return 0;
+  }
+};
+
+
+  return <ProductContext.Provider value={{products,setProducts,calculateDiscountPercentage}}>
     {children}
   </ProductContext.Provider>
 }

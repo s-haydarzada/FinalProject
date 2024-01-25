@@ -13,8 +13,6 @@ const Sidebar = () => {
 
   const { basket, clearCart, itemAmount, total } = useContext(CartContext);
 
-  // console.log(basket)
-
   return (
     <div
       className={`${

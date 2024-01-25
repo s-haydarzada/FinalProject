@@ -6,7 +6,9 @@ import { GetOrders, PostOrders } from "../../../../services/products";
 import { useFormik } from "formik";
 
 const Checkout = () => {
-  const { basket, total,setBasket } = useContext(CartContext);
+  const { basket, total, clearCart } = useContext(CartContext);
+  console.log(basket);
+  const [orders, setOrders] = useState([]);
 
   const item = {
     type: "separator",
@@ -25,12 +27,14 @@ const Checkout = () => {
     initialValues: initialValue,
     onSubmit: async (values) => {
       try {
-        const orderData = { products: basket, userData: values };
+        const orderData = { products: basket, userData: values, total: 0 };
+        basket.forEach((item) => {
+          orderData.total += item.product.productPrice * item.productCount;
+        });
 
         const postedOrder = await PostOrders(orderData);
-
-        console.log(postedOrder.data);
-        setBasket([])
+        setOrders((prevOrders) => [...prevOrders, postedOrder]);
+        clearCart();
         handleReset();
       } catch (error) {
         console.error(error);
@@ -38,32 +42,13 @@ const Checkout = () => {
     },
   });
 
-  const [orders, setOrders] = useState([]);
-
-  useEffect(() => {
-    const getOrders = async () => {
-      try {
-        const res = await GetOrders();
-        console.log(res);
-        setOrders(res);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getOrders();
-  }, []);
-
   return (
     <section className="mt-14 px-12">
       <Breadcrumb
         className="py-4 mb-10 text-sm"
         items={[
           {
-            title: (
-              <Link to="/viewcart" className="cursor-pointer">
-                ViewCart
-              </Link>
-            ),
+            title: <Link to="/viewcart">ViewCart</Link>,
           },
           {
             title: "Checkout",
@@ -81,9 +66,6 @@ const Checkout = () => {
                 type="text"
                 name="email"
                 placeholder="Email or mobile phone number"
-                // onClick={()=>{
-                //   setFieldValue("email",e.target.value)
-                // }}
                 onChange={handleChange}
                 className="border p-3 mt-1 focus:border-[#8a8f6a] outline-none rounded-md"
               />
@@ -95,9 +77,6 @@ const Checkout = () => {
               <input
                 type="text"
                 name="region"
-                // onClick={()=>{
-                //   setFieldValue("region",e.target.value)
-                // }}
                 onChange={handleChange}
                 placeholder="Country/Region"
                 className="border p-3 mt-1 focus:border-[#8a8f6a] outline-none rounded-md"
@@ -107,9 +86,6 @@ const Checkout = () => {
               <input
                 type="text"
                 name="name"
-                // onClick={()=>{
-                //   setFieldValue("name",e.target.value)
-                // }}
                 onChange={handleChange}
                 placeholder="First Name"
                 className="border w-full p-3 mt-1 focus:border-[#8a8f6a] outline-none rounded-md"
@@ -117,9 +93,6 @@ const Checkout = () => {
               <input
                 type="text"
                 name="surname"
-                // onClick={()=>{
-                //   setFieldValue("surname",e.target.value)
-                // }}
                 onChange={handleChange}
                 placeholder="Last Name"
                 className="border w-full p-3 mt-1 focus:border-[#8a8f6a] outline-none rounded-md"
@@ -129,9 +102,6 @@ const Checkout = () => {
               type="text"
               placeholder="Address"
               name="address"
-              // onClick={()=>{
-              //   setFieldValue("address",e.target.value)
-              // }}
               onChange={handleChange}
               className="w-full border p-3 mt-3 focus:border-[#8a8f6a] outline-none rounded-md"
             />

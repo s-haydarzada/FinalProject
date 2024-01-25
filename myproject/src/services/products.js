@@ -60,6 +60,11 @@ export const UpdateBasket = async (id, params) => {
     return data;
 }
 
+export const DeleteBasket=async(id)=>{
+    let {data}=await API.delete(`${import.meta.env.VITE_API_KEY}/site/basket/${id}`);
+    return data;
+}
+
 export const DashboardProductsGetAll = async () => {
     let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/dashboard/products`);
     return data;

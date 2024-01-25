@@ -4,7 +4,7 @@ import { MdEdit } from "react-icons/md";
 import { GetOrders } from "../../../../../../services/products";
 
 const MyOrdersPage = () => {
-  const [orders, setOrders] = useState([]);
+  const [order, setOrder] = useState([]);
 
   const columns = [
     {
@@ -62,7 +62,7 @@ const MyOrdersPage = () => {
       try {
         const res = await GetOrders();
         const orderItem = res.data.data;
-        setOrders(orderItem);
+        setOrder(orderItem);
       } catch (error) {
         console.log(error);
       }
@@ -70,7 +70,7 @@ const MyOrdersPage = () => {
     getOrderData();
   }, []);
 
-  console.log(orders);
+  console.log(order);
 
   return (
     <>

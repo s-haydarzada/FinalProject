@@ -113,10 +113,6 @@ const Viewcart = () => {
             Cart Totals
           </h3>
           <div className="my-5 border px-3 text-black font-bold text-lg">
-            {/* <div className="flex justify-between items-center py-4">
-              <h5>Subtotal</h5>
-              <p>$ 300</p>
-            </div> */}
             <div className="flex justify-between items-center py-4">
               <h5>Total</h5>
               <p>$ {parseFloat(total).toFixed(2)}</p>

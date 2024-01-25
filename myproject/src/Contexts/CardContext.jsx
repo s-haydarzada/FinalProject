@@ -11,6 +11,12 @@ const CardProvider = ({ children }) => {
 
   const { user } = useContext(AuthContext);
 
+  // useEffect(() => {
+  //   const storedBasket = JSON.parse(localStorage.getItem("basket")) || [];
+  //   setBasket(storedBasket);
+  // }, []);
+
+
   //Total
 
   useEffect(() => {
@@ -46,6 +52,7 @@ const CardProvider = ({ children }) => {
       const updatedBasket = [...basket, { productId, productCount, product }];
       setBasket(updatedBasket);
 
+
       if (user) {
         await postBasketData(updatedBasket);
         clearLocalStorage();
@@ -61,6 +68,7 @@ const CardProvider = ({ children }) => {
   const postBasketData = async (updatedBasket) => {
     try {
       const response = await AddNewBasket({ basket: updatedBasket });
+      setBasket(response)
       console.log(response);
       clearLocalStorage();
     } catch (error) {
@@ -88,6 +96,7 @@ const CardProvider = ({ children }) => {
     const getBasketData = async () => {
       try {
         const res = await GetBasket();
+        setBasket(res.data)
         console.log(res.data);
       } catch (error) {
         console.log(error);

@@ -10,17 +10,24 @@ import { CartContext } from "../../../../../../Contexts/CardContext";
 import { useMotionTemplate, motion } from "framer-motion";
 import ShowModal from "../ShowModal";
 import { IoHeart } from "react-icons/io5";
+import { ProductContext } from "../../../../../../Contexts/ProductContext";
 
 const CardItem = ({ product, customStyle }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const { addToBasket, itemAmount } = useContext(CartContext);
+  const { addToBasket } = useContext(CartContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { calculateDiscountPercentage } = useContext(ProductContext);
 
   const { images, productPrice, salePrice, title, _id, stock } = product;
 
+  const discountPercentage = calculateDiscountPercentage(product);
+  const roundedDiscount = Math.round(discountPercentage);
+
+  const showDiscount = salePrice && discountPercentage > 0;
+
   const handleAddToCart = () => {
-      addToBasket(_id, 1, product);
-      showMessage();
+    addToBasket(_id, 1, product);
+    showMessage();
   };
 
   const firstImage = images && images.length > 0 ? images[0] : [];
@@ -44,10 +51,15 @@ const CardItem = ({ product, customStyle }) => {
 
   return (
     <div>
-      <div className="hover:shadow-lg h-[380px] mb-4 mt-5 relative overflow-hidden group transition">
+      <div className="hover:shadow-2xl h-[400px] mb-4 mt-5 relative overflow-hidden group transition">
+        {showDiscount && (
+          <p className="absolute top-0 left-0 bg-green-500 text-white w-16 h-8 z-10 text-center flex justify-center items-center">
+            {roundedDiscount}%
+          </p>
+        )}
         <div
           onMouseMove={handleMouse}
-          className="shadow-zinc-300 border-[#e4e4e4] mb-4 h-[290px] flex flex-col justify-center items-center"
+          className="shadow-zinc-300 border-[#e4e4e4] mb-4 h-[280px] flex flex-col justify-center items-center"
         >
           <motion.div
             style={{
@@ -72,22 +84,30 @@ const CardItem = ({ product, customStyle }) => {
             </button>
           </div>
         </div>
-        <div className="absolute bottom-0 left-1 scale-0 group-hover:scale-110 p-2 flex justify-between w-[90%] items-center gap-y-2 opacity-0 group-hover:opacity-100 group-hover:scale-up-center duration-500">
-          <button
-            onClick={handleAddToCart}
-            type="submit"
-          >
-            <div className="flex justify-center items-center py-2 px-4 mt-3 text-white">
+        <div className="absolute bottom-1 left-1 scale-0 group-hover:scale-110 p-2 flex justify-between w-[90%] items-center gap-y-2 opacity-0 group-hover:opacity-100 group-hover:scale-up-center duration-500">
+          {stock > 0 ? (
+            <button onClick={handleAddToCart} type="submit">
+              <div className="flex justify-center items-center py-2 px-4 mt-3 text-white">
+                <BsPlus
+                  style={customStyle}
+                  className="text-2xl text-black font-bold"
+                />
+                <span style={customStyle} className="text-black">
+                  Add to cart
+                </span>
+              </div>
+            </button>
+          ) : (
+            <div className="flex justify-center items-center py-2 px-4 mt-3 text-white opacity-50 cursor-not-allowed">
               <BsPlus
                 style={customStyle}
                 className="text-2xl text-black font-bold"
               />
               <span style={customStyle} className="text-black">
-                Add to cart
+                Out of Stock
               </span>
             </div>
-          </button>
-
+          )}
           <div>
             <IoHeart className="text-red-600 heart cursor-pointer" />
           </div>
@@ -95,7 +115,7 @@ const CardItem = ({ product, customStyle }) => {
         <div className="flex flex-col justify-between items-center h-[100px]">
           <button>
             <div className="">
-            <Link to={`/product/${product._id}`}>
+              <Link to={`/product/${product._id}`}>
                 <h2 className="font-semibold">{title.slice(0, 20)}...</h2>
               </Link>
             </div>
