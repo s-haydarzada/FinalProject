@@ -6,7 +6,7 @@ import { GetOrders, PostOrders } from "../../../../services/products";
 import { useFormik } from "formik";
 
 const Checkout = () => {
-  const { basket, total } = useContext(CartContext);
+  const { basket, total,setBasket } = useContext(CartContext);
 
   const item = {
     type: "separator",
@@ -30,7 +30,7 @@ const Checkout = () => {
         const postedOrder = await PostOrders(orderData);
 
         console.log(postedOrder.data);
-
+        setBasket([])
         handleReset();
       } catch (error) {
         console.error(error);

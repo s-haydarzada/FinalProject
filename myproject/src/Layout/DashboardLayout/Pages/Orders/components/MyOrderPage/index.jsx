@@ -19,6 +19,11 @@ const MyOrdersPage = () => {
       key: "method",
     },
     {
+      title: "Total",
+      dataIndex: "total",
+      key: "total",
+    },
+    {
       title: "Status",
       dataIndex: "status",
       key: "status",

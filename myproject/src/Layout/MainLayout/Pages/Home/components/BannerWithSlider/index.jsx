@@ -47,7 +47,7 @@ const BannerWithSlider = () => {
   };
 
   return (
-    <section className="relative bg-pink-200">
+    <section className="relative">
       <div className="h-[600px] relative">
         <img src={poster1} alt="" className="h-full w-full object-cover" />
       </div>

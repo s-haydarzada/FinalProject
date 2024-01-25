@@ -13,6 +13,8 @@ const Sidebar = () => {
 
   const { basket, clearCart, itemAmount, total } = useContext(CartContext);
 
+  // console.log(basket)
+
   return (
     <div
       className={`${
@@ -32,9 +34,9 @@ const Sidebar = () => {
       </div>
       {basket && basket.length > 0 ? (
         <div className="flex flex-col gap-y-2 h-[320px] lg:h-[320px] overflow-y-auto overflow-x-hidden border-b">
-          {basket.map((basketItem) => {
+          {basket.map((item) => {
             return (
-              <BasketItem key={basketItem.id} basketItem={basketItem} />
+              <BasketItem key={item.productId} item={item} />
             );
           })}
         </div>

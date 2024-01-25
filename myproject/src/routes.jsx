@@ -1,7 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "./Layout/MainLayout";
 import Home from "./Layout/MainLayout/Pages/Home/home";
-import About from "./Layout/MainLayout/Pages/About/about";
 import Checkout from "./Layout/MainLayout/Pages/Checkout/checkout";
 import Register from "./Layout/MainLayout/Pages/Register/register";
 import Viewcart from "./Layout/MainLayout/Pages/ViewCart/viewcart";
@@ -25,10 +24,6 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
-      },
-      {
-        path: "about",
-        element: <About />,
       },
       {
         path: "product/:id",

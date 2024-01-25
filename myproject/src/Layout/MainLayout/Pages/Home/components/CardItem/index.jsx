@@ -19,12 +19,8 @@ const CardItem = ({ product, customStyle }) => {
   const { images, productPrice, salePrice, title, _id, stock } = product;
 
   const handleAddToCart = () => {
-    if (stock > 0) {
       addToBasket(_id, 1, product);
       showMessage();
-    } else {
-      message.error("Out of stock!");
-    }
   };
 
   const firstImage = images && images.length > 0 ? images[0] : [];
@@ -80,10 +76,8 @@ const CardItem = ({ product, customStyle }) => {
           <button
             onClick={handleAddToCart}
             type="submit"
-            disabled={stock === 0}
-            className="cursor-not-allowed"
           >
-            <div className="flex justify-center items-center text-white w-28 h-10">
+            <div className="flex justify-center items-center py-2 px-4 mt-3 text-white">
               <BsPlus
                 style={customStyle}
                 className="text-2xl text-black font-bold"
@@ -101,7 +95,7 @@ const CardItem = ({ product, customStyle }) => {
         <div className="flex flex-col justify-between items-center h-[100px]">
           <button>
             <div className="">
-              <Link to={`/product/${product._id}`}>
+            <Link to={`/product/${product._id}`}>
                 <h2 className="font-semibold">{title.slice(0, 20)}...</h2>
               </Link>
             </div>

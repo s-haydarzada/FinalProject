@@ -12,7 +12,6 @@ useEffect(()=>{
     try {
       const response = await ProductsGetAll();
       const productList = response.data.product;
-      console.log(productList)
       setProducts(productList)
     } catch (error) {
       console.log(error)

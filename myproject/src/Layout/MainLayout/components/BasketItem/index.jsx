@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { IoMdAdd, IoMdClose, IoMdRemove } from "react-icons/io";
 import { CartContext } from './../../../../Contexts/CardContext';
 
-const BasketItem = ({ basketItem }) => {
-  const { productId, productCount, product } = basketItem;
+const BasketItem = ({ item }) => {
+  const { productId, productCount, product } = item;
   const { title, productPrice, images } = product || {};
   
   if (!product) {

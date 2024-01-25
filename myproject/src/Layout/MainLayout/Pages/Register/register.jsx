@@ -44,17 +44,6 @@ const Register = () => {
     },
   ];
 
-  // const [formFields, setFormFields] = useState(formik);
-
-  // const { name, surname, password, email } = formFields;
-  // const resetFormFields = () => {
-  //   setFormFields(initialValues)
-  // }
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormFields({ ...formFields, [name]: value });
-  // };
 
   return (
     <section className="w-full min-h-screen pt-28">
