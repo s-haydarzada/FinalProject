@@ -23,7 +23,8 @@ const Navbar = () => {
   const { isOpen, setIsOpen } = useContext(SidebarContext);
   const { opened, setOpened } = useContext(WishlistContext);
   const { itemAmount } = useContext(CartContext);
-  const {wishlistAmount}=useContext(WishlistContext)
+  const { wishlistAmount } = useContext(WishlistContext);
+  const [searchVisible, setSearchVisible] = useState(false);
 
   const menu = [
     {
@@ -114,8 +115,15 @@ const Navbar = () => {
         </div>
         <div className="flex gap-4 text-lg mr-4 items-center">
           <div className="flex items-center gap-1 cursor-pointer relative z-30">
-            <IoSearch />
-            <span className="hidden md:block">Search</span>
+            <div className="flex justify-between items-center gap-1 relative" onClick={() => setSearchVisible(!searchVisible)}>
+              <IoSearch />
+              <span className="hidden md:block">Search</span>
+            </div>
+            {searchVisible && (
+              <div className="absolute -bottom-10 right-0">
+                <input type="text" />
+              </div>
+            )}
           </div>
           <div
             onClick={() => setIsOpen(!isOpen)}

@@ -174,6 +174,7 @@ const MyTable = ({ rowData, setRowData,query }) => {
       const searchData = search.data.product;
       console.log(searchData)
       setRowData(searchData);
+      setTableData(searchData)
     };
     searching();
   }, [query]);
