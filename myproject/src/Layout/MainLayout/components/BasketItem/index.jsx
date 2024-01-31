@@ -5,6 +5,7 @@ import { CartContext } from './../../../../Contexts/CardContext';
 
 const BasketItem = ({ item }) => {
   const { productId, productCount, product } = item;
+
   const { title, productPrice, images } = product || {};
   
   if (!product) {

@@ -74,12 +74,13 @@ const DetailContent = () => {
               pagination={true}
               modules={[EffectCube, Pagination]}
               className="mySwiper"
+              style={{ height: "100%" }}
             >
               {imgArray.map((item) => (
                 <SwiperSlide key={item.url}>
                   <img
                     src={item.url}
-                    className="w-full h-[400px] custom_style_img object-fill"
+                    className="w-full h-[400px] custom_style_img object-center"
                     alt="product"
                   />
                 </SwiperSlide>

@@ -7,15 +7,18 @@ import SidebarProvider from "./Contexts/SidebarContext.jsx";
 import CardProvider from "./Contexts/CardContext.jsx";
 import { AuthProvider } from "./Contexts/AuthContext.jsx";
 import BrandProvider from "./Contexts/BrandsContext.jsx";
+import WishlistProvider from "./Contexts/WishlistContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
     <BrandProvider>
       <CardProvider>
         <SidebarProvider>
-          <ProductProvider>
-            <App />
-          </ProductProvider>
+          <WishlistProvider>
+            <ProductProvider>
+              <App />
+            </ProductProvider>
+          </WishlistProvider>
         </SidebarProvider>
       </CardProvider>
     </BrandProvider>

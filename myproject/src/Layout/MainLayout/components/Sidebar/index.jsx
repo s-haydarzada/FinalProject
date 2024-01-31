@@ -34,7 +34,7 @@ const Sidebar = () => {
         <div className="flex flex-col gap-y-2 h-[320px] lg:h-[320px] overflow-y-auto overflow-x-hidden border-b">
           {basket.map((item) => {
             return (
-              <BasketItem key={item.productId} item={item} />
+              <BasketItem key={item._id} item={item} />
             );
           })}
         </div>

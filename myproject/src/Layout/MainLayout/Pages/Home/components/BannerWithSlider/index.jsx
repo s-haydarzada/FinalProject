@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { poster1 } from "../../../../../../assets/Images/index";
-import BannerSliderItem from "../BannerSliderItem";
 import Slider from "react-slick";
 import { ProductContext } from "../../../../../../Contexts/ProductContext";
 import CardItem from "../CardItem";

@@ -42,6 +42,13 @@ const Checkout = () => {
     },
   });
 
+  useEffect(()=>{
+const getData= async()=>{
+  const res= await GetOrders();
+  console.log(res)
+}
+  },[])
+
   return (
     <section className="mt-14 px-12">
       <Breadcrumb

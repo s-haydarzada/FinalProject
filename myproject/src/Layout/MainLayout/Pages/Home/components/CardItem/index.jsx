@@ -11,12 +11,14 @@ import { useMotionTemplate, motion } from "framer-motion";
 import ShowModal from "../ShowModal";
 import { IoHeart } from "react-icons/io5";
 import { ProductContext } from "../../../../../../Contexts/ProductContext";
+import { WishlistContext } from "../../../../../../Contexts/WishlistContext";
 
 const CardItem = ({ product, customStyle }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { addToBasket } = useContext(CartContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { calculateDiscountPercentage } = useContext(ProductContext);
+  const { addToWishlist } = useContext(WishlistContext);
 
   const { images, productPrice, salePrice, title, _id, stock } = product;
 
@@ -27,6 +29,11 @@ const CardItem = ({ product, customStyle }) => {
 
   const handleAddToCart = () => {
     addToBasket(_id, 1, product);
+    showMessage();
+  };
+
+  const handleWishlist = () => {
+    addToWishlist(_id, 1, product);
     showMessage();
   };
 
@@ -51,10 +58,10 @@ const CardItem = ({ product, customStyle }) => {
 
   return (
     <div>
-      <div className="hover:shadow-2xl h-[400px] mb-4 mt-5 relative overflow-hidden group transition">
+      <div className="hover:shadow-2xl border shadow-zinc-300 h-[400px] mb-4 mt-5 relative overflow-hidden group transition">
         {showDiscount && (
-          <p className="absolute top-0 left-0 bg-green-500 text-white w-16 h-8 z-10 text-center flex justify-center items-center">
-            {roundedDiscount}%
+          <p className="absolute top-0 left-0 bg-black text-white w-16 h-8 z-10 text-center flex justify-center items-center">
+            -{roundedDiscount}%
           </p>
         )}
         <div
@@ -108,7 +115,7 @@ const CardItem = ({ product, customStyle }) => {
               </span>
             </div>
           )}
-          <div>
+          <div onClick={handleWishlist}>
             <IoHeart className="text-red-600 heart cursor-pointer" />
           </div>
         </div>

@@ -14,12 +14,16 @@ import { UserOutlined } from "@ant-design/icons";
 import { AuthContext } from "../../../../Contexts/AuthContext";
 import Profile from "../Profile";
 import { ProfileCall } from "../../../../services/auth";
+import { IoHeart } from "react-icons/io5";
+import { WishlistContext } from "../../../../Contexts/WishlistContext";
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
   const [isActivate, setIsActivate] = useState(true);
   const { isOpen, setIsOpen } = useContext(SidebarContext);
+  const { opened, setOpened } = useContext(WishlistContext);
   const { itemAmount } = useContext(CartContext);
+  const {wishlistAmount}=useContext(WishlistContext)
 
   const menu = [
     {
@@ -74,7 +78,6 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { user, setUser } = useContext(AuthContext);
 
-
   const showUserProfile = () => {
     setOpen(true);
     useEffect(() => {
@@ -82,7 +85,7 @@ const Navbar = () => {
         try {
           const accountProfile = await ProfileCall();
           const getProfile = accountProfile.data;
-          console.log(getProfile)
+          console.log(getProfile);
           setUser(getProfile);
         } catch (error) {
           console.log(error);
@@ -109,7 +112,7 @@ const Navbar = () => {
           </Link>
           <Menu menu={menu} />
         </div>
-        <div className="flex gap-4 text-lg mr-4">
+        <div className="flex gap-4 text-lg mr-4 items-center">
           <div className="flex items-center gap-1 cursor-pointer relative z-30">
             <IoSearch />
             <span className="hidden md:block">Search</span>
@@ -121,8 +124,14 @@ const Navbar = () => {
             <MdShoppingCart />
             <span className="text-sm">Cart ({itemAmount})</span>
           </div>
-          {
-            user? <button onClick={() => showUserProfile()}>
+          <div onClick={() => setOpened(!opened)} className="relative">
+            <IoHeart className="text-red-600 text-2xl cursor-pointer" />
+            <div className="absolute -right-2 -top-2 text-xs rounded-full bg-orange-400 w-4 h-4 flex items-center justify-center">
+              {wishlistAmount}
+            </div>
+          </div>
+          {user ? (
+            <button onClick={() => showUserProfile()}>
               <Avatar
                 className="cursor-pointer"
                 size="small"
@@ -131,9 +140,9 @@ const Navbar = () => {
                 }}
                 icon={<UserOutlined />}
               />
-          </button>:null
-          }
-         
+            </button>
+          ) : null}
+
           <Profile
             open={open}
             setOpen={setOpen}
