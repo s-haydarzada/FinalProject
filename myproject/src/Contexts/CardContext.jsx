@@ -11,11 +11,6 @@ const CardProvider = ({ children }) => {
 
   const { user } = useContext(AuthContext);
 
-  // useEffect(() => {
-  //   const storedBasket = JSON.parse(localStorage.getItem("basket")) || [];
-  //   setBasket(storedBasket);
-  // }, []);
-
 
   //Total
 
@@ -50,6 +45,7 @@ const CardProvider = ({ children }) => {
       setBasket(updatedBasket);
     } else {
       const updatedBasket = [...basket, { productId, productCount, product }];
+      console.log(updatedBasket)
       setBasket(updatedBasket);
 
 
@@ -61,7 +57,6 @@ const CardProvider = ({ children }) => {
       }
     }
   };
-
 
 //Post request to Basket
 
@@ -95,15 +90,21 @@ const CardProvider = ({ children }) => {
   useEffect(() => {
     const getBasketData = async () => {
       try {
-        const res = await GetBasket();
-        setBasket(res.data)
-        console.log(res.data);
+        if (user) {
+          const res = await GetBasket();
+          setBasket(res.data);
+          clearLocalStorage();
+        } else {
+          const storedBasket = JSON.parse(localStorage.getItem("basket")) || [];
+          setBasket(storedBasket);
+        }
       } catch (error) {
         console.log(error);
       }
     };
     getBasketData();
-  }, []);
+  }, [user]);
+  
 
   //Remove from Basket
 

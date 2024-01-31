@@ -47,15 +47,6 @@ const MyOrdersPage = () => {
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      name: "John Brown",
-      method: 32,
-      amount: "New York No. 1 Lake Park",
-      status: ["nice", "developer"],
-    },
-  ];
 
   useEffect(() => {
     const getOrderData = async () => {
@@ -77,7 +68,7 @@ const MyOrdersPage = () => {
       <Table
         columns={columns}
         pagination={false}
-        dataSource={orders.map((order, index) => ({
+        dataSource={order.map((order, index) => ({
           ...order,
           key: index.toString(),
         }))}

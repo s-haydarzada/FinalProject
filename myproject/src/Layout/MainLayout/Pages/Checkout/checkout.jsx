@@ -7,10 +7,9 @@ import { useFormik } from "formik";
 
 const Checkout = () => {
   const { basket, total, clearCart } = useContext(CartContext);
-  console.log(basket);
   const [orders, setOrders] = useState([]);
 
-  const item = {
+  const items = {
     type: "separator",
     separator: ">",
   };
@@ -42,12 +41,16 @@ const Checkout = () => {
     },
   });
 
-  useEffect(()=>{
-const getData= async()=>{
-  const res= await GetOrders();
-  console.log(res)
-}
-  },[])
+  useEffect(() => {
+    const getData = async () => {
+      const res = await GetOrders();
+      setOrders(res)
+    };
+    getData();
+
+  }, []);
+
+  console.log(orders)
 
   return (
     <section className="mt-14 px-12">
