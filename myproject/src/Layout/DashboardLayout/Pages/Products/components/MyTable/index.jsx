@@ -1,4 +1,12 @@
-import { Checkbox, Divider, Pagination, Space, Switch, Table } from "antd";
+import {
+  Checkbox,
+  Divider,
+  Pagination,
+  Space,
+  Switch,
+  Table,
+  Spin,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { LiaSearchPlusSolid } from "react-icons/lia";
@@ -12,7 +20,7 @@ import {
 } from "../../../../../../services/products";
 import { FaSearchPlus } from "react-icons/fa";
 
-const MyTable = ({ rowData, setRowData,query }) => {
+const MyTable = ({ rowData, setRowData, query }) => {
   const [selectionType, setSelectionType] = useState("checkbox");
   const [pagination, setPagination] = useState({
     page: 1,
@@ -20,6 +28,7 @@ const MyTable = ({ rowData, setRowData,query }) => {
     totalCount: 0,
   });
 
+  const [loading, setLoading] = useState(true);
   const [tabledata, setTableData] = useState([]);
   const [switchStates, setSwitchStates] = useState([]);
   //UPDATE PRODUCTS START
@@ -149,6 +158,7 @@ const MyTable = ({ rowData, setRowData,query }) => {
       const res = await PaginationAll(pagination.page, pagination.perPage);
       const result = res.data;
       setTableData(result.product);
+      setLoading(false);
 
       setSwitchStates(
         result.product.map((item) => ({
@@ -165,21 +175,18 @@ const MyTable = ({ rowData, setRowData,query }) => {
     };
 
     fetchData();
-  }, [pagination.page, pagination.perPage, updateList,rowData]);
+  }, [pagination.page, pagination.perPage, updateList, rowData]);
 
-  
   useEffect(() => {
     const searching = async () => {
       const search = await ProductSearching(query);
       const searchData = search.data.product;
-      console.log(searchData)
+      console.log(searchData);
       setRowData(searchData);
-      setTableData(searchData)
+      setTableData(searchData);
     };
     searching();
   }, [query]);
-
-
 
   const handlePageChange = (page, perPage) => {
     setPagination((prevPagination) => ({
@@ -263,19 +270,27 @@ const MyTable = ({ rowData, setRowData,query }) => {
   return (
     <div className="w-full overflow-x-auto scrollbar-hide mb-24">
       <Divider />
-      <Table
-        rowKey="_id"
-        rowSelection={{
-          type: selectionType,
-          ...rowSelection,
-        }}
-        columns={columns}
-        pagination={false}
-        dataSource={tabledata.map((item) => ({
-          ...item,
-          ...switchStates.find((state) => state.key === item._id),
-        }))}
-      />
+      {loading ? (
+        <Spin
+          className="flex justify-center items-center mt-20"
+          size="middle"
+        />
+      ) : (
+        <Table
+          rowKey="_id"
+          rowSelection={{
+            type: selectionType,
+            ...rowSelection,
+          }}
+          columns={columns}
+          pagination={false}
+          dataSource={tabledata.map((item) => ({
+            ...item,
+            ...switchStates.find((state) => state.key === item._id),
+          }))}
+        />
+      )}
+
       <Pagination
         className="mt-10 flex justify-end"
         defaultCurrent={pagination.page}

@@ -8,6 +8,7 @@ import { useFormik } from "formik";
 const Checkout = () => {
   const { basket, total, clearCart } = useContext(CartContext);
   const [orders, setOrders] = useState([]);
+  const [data,setData]=useState([])
 
   const items = {
     type: "separator",
@@ -27,11 +28,12 @@ const Checkout = () => {
     onSubmit: async (values) => {
       try {
         const orderData = { products: basket, userData: values, total: 0 };
-        basket.forEach((item) => {
-          orderData.total += item.product.productPrice * item.productCount;
-        });
+        // basket.forEach((item) => {
+        //   orderData.total += item.product.productPrice * item.productCount;
+        // });
 
         const postedOrder = await PostOrders(orderData);
+        console.log(postedOrder)
         setOrders((prevOrders) => [...prevOrders, postedOrder]);
         clearCart();
         handleReset();
@@ -41,16 +43,19 @@ const Checkout = () => {
     },
   });
 
+  console.log(orders)
+  
   useEffect(() => {
     const getData = async () => {
       const res = await GetOrders();
-      setOrders(res)
+      console.log(res)
+      setData(res)
     };
     getData();
 
   }, []);
 
-  console.log(orders)
+  console.log(data)
 
   return (
     <section className="mt-14 px-12">

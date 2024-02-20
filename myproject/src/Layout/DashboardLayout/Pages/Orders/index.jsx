@@ -1,12 +1,15 @@
 import { Table } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import MyOrdersPage from "./components/MyOrderPage";
+import OrderHeader from "./components/OrderHeader";
 
 const Orders = () => {
+  const [order, setOrder] = useState([]);
+
   return (
     <section>
-      <div className="w-full h-[100px]">Header</div>
-      <MyOrdersPage />
+      <OrderHeader order={order} setOrder={setOrder}/>
+      <MyOrdersPage order={order} setOrder={setOrder}/>
     </section>
   );
 };

@@ -49,12 +49,12 @@ const CardProvider = ({ children }) => {
       setBasket(updatedBasket);
 
 
-      if (user) {
-        await postBasketData(updatedBasket);
-        clearLocalStorage();
-      } else {
-        updateLocalStorage({ productId, productCount });
-      }
+      // if (user) {
+      //   await postBasketData(updatedBasket);
+      //   clearLocalStorage();
+      // } else {
+      //   updateLocalStorage({ productId, productCount });
+      // }
     }
   };
 
@@ -87,23 +87,25 @@ const CardProvider = ({ children }) => {
 
   //Get Basket Data
 
-  useEffect(() => {
-    const getBasketData = async () => {
-      try {
-        if (user) {
-          const res = await GetBasket();
-          setBasket(res.data);
-          clearLocalStorage();
-        } else {
-          const storedBasket = JSON.parse(localStorage.getItem("basket")) || [];
-          setBasket(storedBasket);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getBasketData();
-  }, [user]);
+  // useEffect(() => {
+  //   const getBasketData = async () => {
+  //     try {
+  //       if (user) {
+  //         const res = await GetBasket();
+  //         console.log(res.data);
+  //         setBasket(res.data);
+  //         clearLocalStorage();
+  //       } else {
+  //         const storedBasket = JSON.parse(localStorage.getItem("basket")) || [];
+  //         setBasket(storedBasket);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+    
+  //   getBasketData();
+  // }, [user]);
   
 
   //Remove from Basket
@@ -148,6 +150,7 @@ const CardProvider = ({ children }) => {
     <CartContext.Provider
       value={{
         basket,
+        setBasket,
         addToBasket,
         postBasketData,
         removeFromCart,

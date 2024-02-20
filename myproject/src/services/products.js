@@ -9,6 +9,11 @@ export const BrandsCall = async (params) => {
     return data;
 };
 
+export const BrandsGet = async () => {
+    let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/site/brands`);
+    return data;
+}
+
 
 export const BrandsGetAll = async () => {
     let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/dashboard/brands`);
@@ -60,8 +65,8 @@ export const UpdateBasket = async (id, params) => {
     return data;
 }
 
-export const DeleteBasket=async(id)=>{
-    let {data}=await API.delete(`${import.meta.env.VITE_API_KEY}/site/basket/${id}`);
+export const DeleteBasket = async (id) => {
+    let { data } = await API.delete(`${import.meta.env.VITE_API_KEY}/site/basket/${id}`);
     return data;
 }
 
@@ -102,11 +107,11 @@ export const ProductFilterAndSearching = async (page, perPage, minPrice, maxPric
 
 
 export const PostOrders = async (params) => {
-    let { data } = await API.post(`${import.meta.env.VITE_API_KEY}/site/orders`,params);
+    let { data } = await API.post(`${import.meta.env.VITE_API_KEY}/site/orders`, params);
     return data;
 }
 
-export const GetOrders=async()=>{
+export const GetOrders = async () => {
     let { data } = await API.get(`${import.meta.env.VITE_API_KEY}/dashboard/orders`);
     return data;
 }

@@ -31,14 +31,17 @@ const Dashboard = () => {
           try {
               const accountProfile = await ProfileCall();
               const infoProfile = accountProfile.data;
+              console.log(infoProfile)
               setUser(infoProfile);
           } catch (error) {
               console.log(error);
           }
       };
       getUser();
+      
   }, []);
   }
+  console.log(user)
 
   return (
     <Layout>

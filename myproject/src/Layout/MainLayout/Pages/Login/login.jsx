@@ -11,11 +11,12 @@ import { LoginCall } from "../../../../services/auth";
 const Login = () => {
   const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  
 
   useEffect(() => {
+    
     if (user) {
-      if (user.role === "superadmin" || user.role==="admin") {
+      if (user.role === "superadmin" || user.role === "admin") {
         navigate("/dashboard");
       } else if (user.role === "client") {
         navigate("/");
@@ -24,6 +25,8 @@ const Login = () => {
       }
     }
   }, [user]);
+
+console.log(user)
 
   const dynamicItems = [
     {
@@ -55,7 +58,8 @@ const Login = () => {
         });
     },
   });
-  
+
+  console.log(user)
 
   return (
     <section className="w-full min-h-screen pt-28">

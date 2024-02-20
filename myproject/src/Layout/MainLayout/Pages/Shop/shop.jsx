@@ -6,13 +6,12 @@ import { FaList } from "react-icons/fa";
 import { ProductContext } from "../../../../Contexts/ProductContext";
 import CardItem from "../Home/components/CardItem";
 import { Pagination } from "antd";
-import { ProductFilterAndSearching } from "../../../../services/products";
-import { BrandContext } from "../../../../Contexts/BrandsContext";
+import { BrandsGet, ProductFilterAndSearching } from "../../../../services/products";
 import { useFormik } from "formik";
 
 const Shop = () => {
   const { products, setProducts } = useContext(ProductContext);
-  const { brands } = useContext(BrandContext);
+  const [brand, setBrand] = useState([]);
 
   const [filterOptions, setFilterOptions] = useState({
     page: 1,
@@ -28,8 +27,8 @@ const Shop = () => {
     initialValues: {
       page: 1,
       perPage: 10,
-      minPrice: null,
-      maxPrice: null,
+      minPrice: "",
+      maxPrice: "",
       stock: false,
       outStock: false,
       totalCount: 0,
@@ -43,10 +42,9 @@ const Shop = () => {
           values.perPage,
           values.minPrice,
           values.maxPrice,
-          values.stock,
+          values.stock
         );
-        console.log(filteredProducts.data.product);
-        setFilterOptions(filteredProducts.data.product);
+        setProducts(filteredProducts.data.product);
         setFilterOptions((prevOptions) => ({
           ...prevOptions,
           page: filteredProducts.page,
@@ -64,11 +62,22 @@ const Shop = () => {
       filterOptions.perPage,
       filterOptions.minPrice,
       filterOptions.maxPrice,
-      filterOptions.stock,
+      filterOptions.stock
     );
   }, [filterOptions]);
 
-  console.log(filterOptions)
+  useEffect(() => {
+    const getBrand = async () => {
+      try {
+        const response = await BrandsGet();
+        const brandList = response.data;
+        setBrand(brandList);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+    getBrand();
+  }, []);
 
   return (
     <section className="pt-32 pb-12 lg:py-32 flex flex-col overscroll-y-auto scrollbar-hide">
@@ -175,13 +184,13 @@ const Shop = () => {
                     </button>
                   </div>
                 </div>
-                {/* <div className="border p-4 mb-5">
+                <div className="border p-4 mb-5">
                   <h3 className="mb-4 mx-3 text-left text-2xl italic">
                     Brands
                   </h3>
                   <ul className="w-72 text-sm font-medium">
-                    {brands.map((brand) => (
-                      <li key={brand.id} className="w-full rounded-t-lg">
+                    {brand.map((brand) => (
+                      <li key={brand._id} className="w-full rounded-t-lg">
                         <div className="flex items-center ps-3">
                           <input
                             type="checkbox"
@@ -203,7 +212,7 @@ const Shop = () => {
                       </li>
                     ))}
                   </ul>
-                </div> */}
+                </div>
               </form>
             </div>
             <div className="col-span-2 flex flex-col">

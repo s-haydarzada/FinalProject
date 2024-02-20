@@ -1,10 +1,12 @@
-import { Table } from "antd";
+import { Spin, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { GetOrders } from "../../../../../../services/products";
+import { useRef } from "react";
 
-const MyOrdersPage = () => {
-  const [order, setOrder] = useState([]);
+const MyOrdersPage = ({order,setOrder}) => {
+  // const [order, setOrder] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const columns = [
     {
@@ -47,7 +49,6 @@ const MyOrdersPage = () => {
     },
   ];
 
-
   useEffect(() => {
     const getOrderData = async () => {
       try {
@@ -56,6 +57,8 @@ const MyOrdersPage = () => {
         setOrder(orderItem);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     getOrderData();
@@ -64,16 +67,23 @@ const MyOrdersPage = () => {
   console.log(order);
 
   return (
-    <>
-      <Table
-        columns={columns}
-        pagination={false}
-        dataSource={order.map((order, index) => ({
-          ...order,
-          key: index.toString(),
-        }))}
-      />
-    </>
+    <div className="mt-5">
+      {loading ? (
+        <Spin
+          className="flex justify-center items-center mt-20"
+          size="middle"
+        />
+      ) : (
+        <Table
+          columns={columns}
+          pagination={false}
+          dataSource={order.map((item, index) => ({
+            ...item,
+            key: index.toString(),
+          }))}
+        />
+      )}
+    </div>
   );
 };
 

@@ -12,6 +12,7 @@ const Sidebar = () => {
   const { isOpen, handleClose } = useContext(SidebarContext);
 
   const { basket, clearCart, itemAmount, total } = useContext(CartContext);
+  console.log(basket)
 
   return (
     <div

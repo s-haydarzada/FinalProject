@@ -58,7 +58,7 @@ const CardItem = ({ product, customStyle }) => {
 
   return (
     <div>
-      <div className="hover:shadow-2xl border shadow-zinc-300 h-[400px] mb-4 mt-5 relative overflow-hidden group transition">
+      <div className="hover:shadow-2xl shadow-zinc-300 h-[400px] mb-4 mt-5 relative overflow-hidden group transition z-0">
         {showDiscount && (
           <p className="absolute top-0 left-0 bg-black text-white w-16 h-8 z-10 text-center flex justify-center items-center">
             -{roundedDiscount}%

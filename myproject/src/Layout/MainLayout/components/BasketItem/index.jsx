@@ -4,7 +4,9 @@ import { IoMdAdd, IoMdClose, IoMdRemove } from "react-icons/io";
 import { CartContext } from './../../../../Contexts/CardContext';
 
 const BasketItem = ({ item }) => {
+  console.log(item)
   const { productId, productCount, product } = item;
+  console.log({product})
 
   const { title, productPrice, images } = product || {};
   
